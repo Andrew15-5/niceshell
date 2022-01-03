@@ -5,9 +5,10 @@ from shell.core import (
     normalize_short_and_long_args,
     quotes_wrapper
 )
+from shell.gnu_coreutils import ls
 
 __all__ = ["GID", "GROUP", "HOME", "Shell", "ShortArgsOption", "UID", "USER",
-           "normalize_short_and_long_args", "quotes_wrapper"]
+           "ls", "normalize_short_and_long_args", "quotes_wrapper"]
 
 GID = Shell("id -g").output()[:-1]
 GROUP = Shell("id -gn").output()[:-1]
