@@ -1,6 +1,6 @@
 from typing import Iterable, Union
 
-from shell import Shell
+from core import Shell
 
 
 def ls(path: Union[str, Iterable[str]] = '',

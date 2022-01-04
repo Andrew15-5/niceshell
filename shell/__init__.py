@@ -1,11 +1,11 @@
 #!/usr/bin/python3
-from shell.core import (
+from core import (
     Shell,
     ShortArgsOption,
     normalize_short_and_long_args,
     quotes_wrapper
 )
-from shell.gnu_coreutils import ls
+from gnu_coreutils import ls
 
 __all__ = ["GID", "GROUP", "HOME", "Shell", "ShortArgsOption", "UID", "USER",
            "ls", "normalize_short_and_long_args", "quotes_wrapper"]

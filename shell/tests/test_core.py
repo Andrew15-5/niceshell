@@ -1,6 +1,9 @@
 #!/usr/bin/python3
+import sys
+
 import pytest
 
+sys.path.extend([f"{sys.path[0]}/..", f"{sys.path[0]}/../.."])
 from shell import core
 
 

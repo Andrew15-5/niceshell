@@ -1,10 +1,12 @@
 from subprocess import PIPE, Popen
 from typing import AnyStr, IO, Iterable, List, Union
 
+from core import *
+
 
 class Shell:
     command: str
-    process: Popen[str]
+    process: Popen
     stdin: IO[AnyStr]
     stdout: IO[AnyStr]
     stderr: IO[AnyStr]
