@@ -9,6 +9,92 @@ from shell import gnu_coreutils
 
 
 class TestGNUcoreutils:
+    def test_ln(self):
+        ln = gnu_coreutils.ln
+        # Errors
+        # source_path must be str or Iterable[str].
+        with pytest.raises(TypeError):
+            ln(1)
+        with pytest.raises(TypeError):
+            ln([1])
+
+        # source_path (Iterable[str]) is empty.
+        with pytest.raises(IndexError):
+            ln([], '')
+
+        # destination_path must be str.
+        with pytest.raises(TypeError):
+            ln('*', 1)
+
+        # Asserts batch=False
+        def ln(source_path: Union[str, Iterable[str]],
+               destination_path: str,
+               sudo=False,
+               short_args: Union[str, Iterable[str]] = [],
+               long_args: Iterable[str] = []) -> str:
+            return gnu_coreutils.ln(source_path, destination_path, False,
+                                    sudo, short_args, long_args, True)
+        # Test simple (edge) cases
+        assert ln('', '') == 'ln  -- "" ""'
+        assert ln([''], '') == 'ln  -- "" ""'
+        assert ln(('', ''), '') == 'ln  -- "" "" ""'
+        assert ln("/file", "/tmp") == 'ln  -- "/file" "/tmp"'
+        # Test short/long arguments
+        assert ln('', '', short_args="-s") == 'ln -s -- "" ""'
+        assert ln('', '', long_args=["--force"]) == 'ln --force -- "" ""'
+        assert ln('', '', short_args="rs", long_args=["force"]
+                  ) == 'ln -r -s --force -- "" ""'
+        assert ln('', '', short_args=["r", "S bak"], long_args=["all"]
+                  ) == 'ln -r -S bak --all -- "" ""'
+        # Test everything
+        assert ln(
+            "/folder with spaces/dir", "/different folder with spaces",
+            short_args='s'
+        ) == 'ln -s -- "/folder with spaces/dir" "/different folder with spaces"'
+        assert ln(["../../tmp/file1", "file2", "f i l e 3"], "~/"
+                  ) == 'ln  -- "../../tmp/file1" "file2" "f i l e 3" ~/""'
+        assert ln(
+            ["tmp/dir1", "dir2", "~/d i r 3/src/"], "~/", sudo=True,
+            short_args=['r', 's', 'f', "S .bak"], long_args=["verbose"]
+        ) == 'sudo ln -r -s -f -S .bak --verbose -- "tmp/dir1" "dir2" ~/"d i r 3/src/" ~/""'
+
+        # Asserts batch=True
+        def ln(source_path: Union[str, Iterable[str]],
+               destination_path: str,
+               sudo=False,
+               short_args: Union[str, Iterable[str]] = [],
+               long_args: Iterable[str] = []) -> str:
+            return gnu_coreutils.ln(source_path, destination_path, True,
+                                    sudo, short_args, long_args, True)
+        # Test simple/edge cases
+        assert ln('', '') == 'ln  --  ""'
+        assert ln([''], '') == 'ln  --  ""'
+        assert ln(('', ''), '') == 'ln  --   ""'
+        assert ln("/file", "/tmp") == 'ln  -- /file "/tmp"'
+        # Test short/long arguments
+        assert ln('', '', short_args="-s") == 'ln -s --  ""'
+        assert ln('', '', long_args=["--force"]) == 'ln --force --  ""'
+        assert ln('', '', short_args="rs", long_args=["force"]
+                  ) == 'ln -r -s --force --  ""'
+        assert ln('', '', short_args=["r", "S bak"], long_args=["all"]
+                  ) == 'ln -r -S bak --all --  ""'
+        # Test everything
+        assert ln(
+            ["tmp/dir1", "dir2", "~/dir3/src/*"], "~", sudo=True,
+            short_args=['r', 's', 'f', "S .bak"], long_args=["verbose"]
+        ) == 'sudo ln -r -s -f -S .bak --verbose -- tmp/dir1 dir2 ~/dir3/src/* ~'
+
+        # Special cases (hacks)
+        # Case #1
+        assert ln("file1 file2", "~/dest"
+                  ) == 'ln  -- file1 file2 ~/"dest"'
+        assert ln(["file1 file2"], "~/dest"
+                  ) == 'ln  -- file1 file2 ~/"dest"'
+
+        # Case #2
+        assert ln(['"/dir 1" dir2/*'], '~', short_args='s'
+                  ) == 'ln -s -- "/dir 1" dir2/* ~'
+
     def test_ls(self):
         ls = gnu_coreutils.ls
         # Errors

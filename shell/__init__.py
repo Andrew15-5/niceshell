@@ -6,10 +6,10 @@ from core import (
     normalize_short_and_long_args,
     quotes_wrapper
 )
-from gnu_coreutils import ls
+from gnu_coreutils import ln, ls
 
 __all__ = ["GID", "GROUP", "HOME", "Shell", "ShortArgsOption", "UID", "USER",
-           "expose_tilde", "ls", "normalize_short_and_long_args",
+           "expose_tilde", "ln", "ls", "normalize_short_and_long_args",
            "quotes_wrapper"]
 
 GID = Shell("id -g").output()[:-1]
