@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from typing import Iterable, Union
 
-from core import *
+from .core import *
 
 __all__ = ["ln", "ls"]
 

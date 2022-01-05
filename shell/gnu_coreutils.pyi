@@ -1,6 +1,6 @@
 from typing import Iterable, Union
 
-from core import Shell
+from .core import Shell
 
 
 def ln(source_path: Union[str, Iterable[str]],
