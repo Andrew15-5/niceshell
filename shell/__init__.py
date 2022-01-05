@@ -17,10 +17,3 @@ GROUP = Shell("id -gn").output()[:-1]
 HOME = Shell("printf ~").output()
 UID = Shell("id -u").output()[:-1]
 USER = Shell("id -un").output()[:-1]
-
-if __name__ == "__main__":
-    print(f"{GID=}")
-    print(f"{GROUP=}")
-    print(f"{HOME=}")
-    print(f"{UID=}")
-    print(f"{USER=}")
