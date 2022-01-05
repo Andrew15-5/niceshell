@@ -1,11 +1,22 @@
 #!/usr/bin/python3
 from inspect import cleandoc
-import re
 from subprocess import PIPE, Popen
 from typing import Iterable, List, Union
 
-__all__ = ["normalize_short_and_long_args", "quotes_wrapper", "Shell",
-           "ShortArgsOption"]
+import regex as re
+
+__all__ = ["expose_tilde", "normalize_short_and_long_args", "quotes_wrapper",
+           "Shell", "ShortArgsOption"]
+
+
+def expose_tilde(quoted_path: str) -> str:
+    R"""
+    Returns exposed '~' from "" in order for it to expand itself (/home/user).
+    Note: Should only be used as expose_tilde(quotes_wrapper()).
+    """
+    quoted_path = re.sub(r'(?<=^| )"~/', '~/"', quoted_path)  # Case 1
+    quoted_path = re.sub(r'(?<=^| )"~"', '~', quoted_path)  # Case 2
+    return quoted_path
 
 
 class Shell:

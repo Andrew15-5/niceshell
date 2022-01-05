@@ -2,13 +2,15 @@
 from core import (
     Shell,
     ShortArgsOption,
+    expose_tilde,
     normalize_short_and_long_args,
     quotes_wrapper
 )
 from gnu_coreutils import ls
 
 __all__ = ["GID", "GROUP", "HOME", "Shell", "ShortArgsOption", "UID", "USER",
-           "ls", "normalize_short_and_long_args", "quotes_wrapper"]
+           "expose_tilde", "ls", "normalize_short_and_long_args",
+           "quotes_wrapper"]
 
 GID = Shell("id -g").output()[:-1]
 GROUP = Shell("id -gn").output()[:-1]

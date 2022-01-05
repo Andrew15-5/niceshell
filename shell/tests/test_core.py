@@ -8,6 +8,24 @@ from shell import core
 
 
 class TestCore:
+    def test_expose_tilde(self):
+        expose_tilde = core.expose_tilde
+        quotes_wrapper = core.quotes_wrapper
+
+        # Errors
+        # quoted_path must be str
+        with pytest.raises(TypeError):
+            expose_tilde(1)
+        with pytest.raises(TypeError):
+            expose_tilde([''])
+
+        # Asserts
+        assert expose_tilde(quotes_wrapper("~")) == '~'
+        assert expose_tilde(quotes_wrapper("~/")) == '~/""'
+        assert expose_tilde(quotes_wrapper("~/dir")) == '~/"dir"'
+        assert expose_tilde(quotes_wrapper("dir ~/")) == '"dir ~/"'
+        assert expose_tilde(quotes_wrapper('dir "~/')) == R'"dir \"~/"'
+
     def test_normalize_short_and_long_args(self):
         normalize = core.normalize_short_and_long_args
         ShortArgsOption = core.ShortArgsOption

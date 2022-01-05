@@ -4,6 +4,9 @@ from typing import AnyStr, IO, Iterable, List, Union
 from core import *
 
 
+def expose_tilde(quoted_path: str) -> str: ...
+
+
 class ShortArgsOption:
     TOGETHER = 0
     APART = 1

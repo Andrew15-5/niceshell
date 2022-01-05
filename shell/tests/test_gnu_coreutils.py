@@ -41,9 +41,10 @@ class TestGNUcoreutils:
                   ) == 'ls -l -d --all --'
         assert ls(short_args=["-l", "-d"], long_args=["all"]
                   ) == 'ls -l -d --all --'
-        assert ls(["here/*", "there/*"], sudo=True,
-                  short_args=['l', 'd', "-I PATTERN"], long_args=["all"]
-                  ) == 'sudo ls -l -d -I PATTERN --all -- "here/*" "there/*"'
+        assert ls(
+            ["~/here/*", "~/there/*"], sudo=True,
+            short_args=['l', 'd', "-I PATTERN"], long_args=["all"]
+        ) == 'sudo ls -l -d -I PATTERN --all -- ~/"here/*" ~/"there/*"'
 
         # Asserts batch=True
         def ls(path: Union[str, Iterable[str]] = '',

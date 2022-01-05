@@ -14,6 +14,8 @@ def ls(path: Union[str, Iterable[str]] = '',
        test=False) -> Union[Shell, str]:
     """
     Wrapper for ls command from GNU Core Utilities.
+    Note: If path is wrapped in quotes (batch=False), '~' will still work (will
+    be expanded).
 
     Parameters:
         path (str | Iterable[str]): directory(-ies) of which content is need to
@@ -40,7 +42,7 @@ def ls(path: Union[str, Iterable[str]] = '',
     if list(path) in ([], ['']):  # Edge cases
         path = ''
     if not batch and path != '':  # Don't wrap emptiness in double quotes
-        path = quotes_wrapper(path)
+        path = expose_tilde(quotes_wrapper(path))
     elif not isinstance(path, str):  # Concatenate anything but str (batch)
         path = ' '.join(path)
     sudo = "sudo" if sudo else ''
