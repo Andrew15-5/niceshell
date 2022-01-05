@@ -101,10 +101,11 @@ def ls(path: Union[str, Iterable[str]] = '',
         raise TypeError("path must be str or Iterable[str].")
     if list(path) in ([], ['']):  # Edge cases
         path = ''
-    if not batch and path != '':  # Don't wrap emptiness in double quotes
+    if batch:
+        if not isinstance(path, str):  # Concatenate anything but str (batch)
+            path = ' '.join(path)
+    elif path != '':  # Don't wrap emptiness in double quotes
         path = expose_tilde(quotes_wrapper(path))
-    elif not isinstance(path, str):  # Concatenate anything but str (batch)
-        path = ' '.join(path)
     sudo = "sudo" if sudo else ''
     args = normalize_short_and_long_args(
         short_args, long_args, ShortArgsOption.APART)

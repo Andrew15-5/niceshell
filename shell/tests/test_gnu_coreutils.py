@@ -111,14 +111,17 @@ class TestGNUcoreutils:
                long_args: Iterable[str] = []) -> str:
             return gnu_coreutils.ls(
                 path, False, sudo, short_args, long_args, True)
+        # Test simple/edge cases
         assert ls() == "ls  --"
         assert ls(()) == "ls  --"
         assert ls(set('')) == "ls  --"
+        assert ls(['', '']) == 'ls  -- "" ""'
         assert ls("/tmp") == 'ls  -- "/tmp"'
         assert ls("/folder with spaces/dir"
                   ) == 'ls  -- "/folder with spaces/dir"'
         assert ls(["dir1", "dir2", "d i r 3"]
                   ) == 'ls  -- "dir1" "dir2" "d i r 3"'
+        # Test short/long arguments
         assert ls(short_args="a"
                   ) == 'ls -a --'
         assert ls(long_args=["--all"]
@@ -127,6 +130,7 @@ class TestGNUcoreutils:
                   ) == 'ls -l -d --all --'
         assert ls(short_args=["-l", "-d"], long_args=["all"]
                   ) == 'ls -l -d --all --'
+        # Test everything
         assert ls(
             ["~/here/*", "~/there/*"], sudo=True,
             short_args=['l', 'd', "-I PATTERN"], long_args=["all"]
@@ -139,23 +143,37 @@ class TestGNUcoreutils:
                long_args: Iterable[str] = []) -> str:
             return gnu_coreutils.ls(
                 path, True, sudo, short_args, long_args, True)
+        # Test simple/edge cases
         assert ls() == "ls  --"
         assert ls(()) == "ls  --"
         assert ls(set('')) == "ls  --"
         assert ls("/tmp") == "ls  -- /tmp"
         assert ls("/folder with spaces/dir"
                   ) == "ls  -- /folder with spaces/dir"
-        assert ls(["dir1", "dir2", "d i r 3"]
-                  ) == "ls  -- dir1 dir2 d i r 3"
+        assert ls(["dir1", "dir2", "dir3"]
+                  ) == "ls  -- dir1 dir2 dir3"
+        # Test short/long arguments
         assert ls(short_args="-a") == "ls -a --"
         assert ls(long_args=["--all"]) == "ls --all --"
         assert ls(short_args="ld", long_args=["all"]
                   ) == "ls -l -d --all --"
         assert ls(short_args=["l", "d"], long_args=["all"]
                   ) == "ls -l -d --all --"
+        # Test everything
         assert ls(["here/*", "there/*"], sudo=True,
                   short_args=['l', 'd', "I PATTERN"], long_args=["all"]
                   ) == "sudo ls -l -d -I PATTERN --all -- here/* there/*"
+
+        # Special cases (hacks)
+        # Case #1
+        assert ls("dir1 dir2 dir3"
+                  ) == "ls  -- dir1 dir2 dir3"
+        assert ls(["dir1 dir2 dir3"]
+                  ) == "ls  -- dir1 dir2 dir3"
+
+        # Case #2
+        assert ls(['"dir 1" "dir 2" dir3/*']
+                  ) == 'ls  -- "dir 1" "dir 2" dir3/*'
 
 
 if __name__ == "__main__":
