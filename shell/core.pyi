@@ -4,6 +4,18 @@ from typing import AnyStr, IO, Iterable, List, Union
 from core import *
 
 
+class ShortArgsOption:
+    TOGETHER = 0
+    APART = 1
+    NO_DASH = 2
+
+
+def normalize_short_and_long_args(
+    short_args: Union[str, Iterable[str]] = [],
+    long_args: Iterable[str] = [],
+    short_args_option: ShortArgsOption = ShortArgsOption.TOGETHER) -> str: ...
+
+
 class Shell:
     command: str
     process: Popen
@@ -18,7 +30,6 @@ class Shell:
                  stderr: int = PIPE) -> None: ...
 
     def error_output(self) -> str: ...
-
     def exit_code(self) -> int: ...
 
     def get_lines(self,
@@ -34,18 +45,6 @@ class Shell:
               stderr: int = PIPE) -> Shell: ...
 
     def wait(self) -> int: ...
-
-
-class ShortArgsOption:
-    TOGETHER = 0
-    APART = 1
-    NO_DASH = 2
-
-
-def normalize_short_and_long_args(
-    short_args: Union[str, Iterable[str]] = [],
-    long_args: Iterable[str] = [],
-    short_args_option: ShortArgsOption = ShortArgsOption.TOGETHER) -> str: ...
 
 
 def quotes_wrapper(path: Union[str, Iterable[str]]) -> str: ...

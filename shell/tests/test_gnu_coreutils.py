@@ -14,9 +14,9 @@ class TestGNUcoreutils:
         # Errors
         # path must be str or Iterable[str].
         with pytest.raises(TypeError):
-            ls(1)
+            ls(1, test=True)
         with pytest.raises(TypeError):
-            ls([1])
+            ls([1], test=True)
 
         # Asserts batch=False
         def ls(path: Union[str, Iterable[str]] = '',

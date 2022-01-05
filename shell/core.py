@@ -183,11 +183,8 @@ def normalize_short_and_long_args(
         all(isinstance(e, str) for e in largs) and
             len([e for e in largs if e])):
         largs = [re.sub(r'^-+', '', arg) for arg in largs]
-        print(largs)
         largs = " --".join(largs)
-        print(largs)
         largs = f"--{largs}"
-        print(largs)
     else:
         largs = ''
 
