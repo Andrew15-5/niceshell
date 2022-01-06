@@ -19,6 +19,138 @@ def expose_tilde(quoted_path: str) -> str:
     return quoted_path
 
 
+class ShortArgsOption:
+    '''Enum object for normalize_short_and_long_args()'''
+    TOGETHER = 0
+    APART = 1
+    NO_DASH = 2
+    _last = 2
+
+
+def normalize_short_and_long_args(
+        short_args: Union[str, Iterable[str]] = [],
+        long_args: Iterable[str] = [],
+        short_args_option: ShortArgsOption = ShortArgsOption.TOGETHER) -> str:
+    """
+    Returns string of normalized short and long args.
+
+    Parameters:
+        short_args (str | Iterable[str]): string or array of short arguments.
+            Prefix-dash is ignored. Default is [] (no short arguments).
+        long_args (Iterable[str]): array of long arguments. Prefix-dashes are
+            ignored. Default is [] (no long arguments).
+        short_args_option (ShortArgsOption): sets the way short args are
+            formatted. Default is ShortArgsOption.TOGETHER.
+
+    Raises:
+        ValueError: spaces in short args which are TOGETHER or
+            any of short args which are TOGETHER is longer than 1 char. or
+            invalid value of short_args_option.
+
+    Returns:
+        str: string of normalized short and long args.
+    """
+    if (not isinstance(short_args, (str, Iterable)) or
+            not all(isinstance(e, str) for e in short_args)):
+        raise TypeError("short_args' type must be str or Iterable[str].")
+    if (not isinstance(long_args, Iterable) or
+        isinstance(long_args, str) or
+            not all(isinstance(e, str) for e in long_args)):
+        raise TypeError("long_args' type must be Iterable[str].")
+    if (type(short_args_option) != int or
+        short_args_option < 0 or
+            short_args_option > ShortArgsOption._last):
+        raise ValueError(cleandoc(
+            """Invalid value of short_args_option. Valid values are:
+            ShortArgsOption.TOGETHER,
+            ShortArgsOption.APART,
+            ShortArgsOption.NO_DASH."""))
+
+    # Make aliases for better readability
+    shargs = short_args
+    largs = long_args
+
+    # Shargs
+    if isinstance(shargs, str) and shargs:
+        if short_args_option == ShortArgsOption.TOGETHER and shargs.find(' ') > -1:
+            raise ValueError("No spaces are allowed in short args (str).")
+        shargs = shargs.replace('-', '')
+        if short_args_option == ShortArgsOption.TOGETHER:
+            shargs = f"-{shargs}"
+        elif short_args_option == ShortArgsOption.APART:
+            shargs = '-' + " -".join(shargs)
+        elif short_args_option == ShortArgsOption.NO_DASH:
+            shargs = ' '.join(shargs)
+    elif (isinstance(shargs, Iterable) and
+          len(shargs) and
+          all(isinstance(e, str) for e in shargs) and
+          len([e for e in shargs if e])):
+        shargs = [arg.replace('-', '') for arg in shargs]
+        if short_args_option == ShortArgsOption.TOGETHER:
+            if not all(len(e) == 1 for e in shargs):
+                raise ValueError("Short arguments must be 1 character long.")
+            shargs = '-' + ''.join(shargs)
+        elif short_args_option == ShortArgsOption.APART:
+            shargs = '-' + " -".join(shargs)
+        elif short_args_option == ShortArgsOption.NO_DASH:
+            shargs = ' '.join(shargs)
+    else:
+        shargs = ''
+
+    # Largs
+    if (not isinstance(largs, str) and
+        isinstance(largs, Iterable) and
+        len(largs) and
+        all(isinstance(e, str) for e in largs) and
+            len([e for e in largs if e])):
+        largs = [re.sub(r'^-+', '', arg) for arg in largs]
+        largs = " --".join(largs)
+        largs = f"--{largs}"
+    else:
+        largs = ''
+
+    # Return str
+    if shargs:
+        if largs:
+            return f"{shargs} {largs}"
+        else:
+            return shargs
+    else:
+        if largs:
+            return largs
+        else:
+            return ''
+
+
+def quotes_wrapper(path: Union[str, Iterable[str]]) -> str:
+    """
+    Wraps string(s) in "double quotes". In case of Iterable[str] each element
+    is wrapped in its personal double quotes and then elements are concatenated
+    with single whitespace between them.
+
+    Parameters:
+        path (str | Iterable[str]): string or array of strings that needs to be
+            wrapped in double quotes.
+
+    Raises:
+        TypeError: path's type isn't (str | Iterable[str]).
+
+    Returns:
+        str: string wrapped with double quotes.
+    """
+    if isinstance(path, str):
+        path = path.replace('"', R'\"')
+        path = f'"{path}"'
+    elif (isinstance(path, Iterable) and
+          len(path) and
+          all(isinstance(e, str) for e in path)):
+        path = [e.replace('"', R'\"') for e in path]
+        path = f'''"{'" "'.join(path)}"'''
+    else:
+        raise TypeError("path's type must be str or Iterable[str].")
+    return path
+
+
 class Shell:
     """
     Simple class that allows to execute shell command and get it's output
@@ -159,135 +291,3 @@ class Shell:
     def wait(self) -> int:
         '''Waits the end of the command execution and returns its exit code.'''
         return self.exit_code()
-
-
-class ShortArgsOption:
-    '''Enum object for normalize_short_and_long_args()'''
-    TOGETHER = 0
-    APART = 1
-    NO_DASH = 2
-    _last = 2
-
-
-def normalize_short_and_long_args(
-        short_args: Union[str, Iterable[str]] = [],
-        long_args: Iterable[str] = [],
-        short_args_option: ShortArgsOption = ShortArgsOption.TOGETHER) -> str:
-    """
-    Returns string of normalized short and long args.
-
-    Parameters:
-        short_args (str | Iterable[str]): string or array of short arguments.
-            Prefix-dash is ignored. Default is [] (no short arguments).
-        long_args (Iterable[str]): array of long arguments. Prefix-dashes are
-            ignored. Default is [] (no long arguments).
-        short_args_option (ShortArgsOption): sets the way short args are
-            formatted. Default is ShortArgsOption.TOGETHER.
-
-    Raises:
-        ValueError: spaces in short args which are TOGETHER or
-            any of short args which are TOGETHER is longer than 1 char. or
-            invalid value of short_args_option.
-
-    Returns:
-        str: string of normalized short and long args.
-    """
-    if (not isinstance(short_args, (str, Iterable)) or
-            not all(isinstance(e, str) for e in short_args)):
-        raise TypeError("short_args' type must be str or Iterable[str].")
-    if (not isinstance(long_args, Iterable) or
-        isinstance(long_args, str) or
-            not all(isinstance(e, str) for e in long_args)):
-        raise TypeError("long_args' type must be Iterable[str].")
-    if (type(short_args_option) != int or
-        short_args_option < 0 or
-            short_args_option > ShortArgsOption._last):
-        raise ValueError(cleandoc(
-            """Invalid value of short_args_option. Valid values are:
-            ShortArgsOption.TOGETHER,
-            ShortArgsOption.APART,
-            ShortArgsOption.NO_DASH."""))
-
-    # Make aliases for better readability
-    shargs = short_args
-    largs = long_args
-
-    # Shargs
-    if isinstance(shargs, str) and shargs:
-        if short_args_option == ShortArgsOption.TOGETHER and shargs.find(' ') > -1:
-            raise ValueError("No spaces are allowed in short args (str).")
-        shargs = shargs.replace('-', '')
-        if short_args_option == ShortArgsOption.TOGETHER:
-            shargs = f"-{shargs}"
-        elif short_args_option == ShortArgsOption.APART:
-            shargs = '-' + " -".join(shargs)
-        elif short_args_option == ShortArgsOption.NO_DASH:
-            shargs = ' '.join(shargs)
-    elif (isinstance(shargs, Iterable) and
-          len(shargs) and
-          all(isinstance(e, str) for e in shargs) and
-          len([e for e in shargs if e])):
-        shargs = [arg.replace('-', '') for arg in shargs]
-        if short_args_option == ShortArgsOption.TOGETHER:
-            if not all(len(e) == 1 for e in shargs):
-                raise ValueError("Short arguments must be 1 character long.")
-            shargs = '-' + ''.join(shargs)
-        elif short_args_option == ShortArgsOption.APART:
-            shargs = '-' + " -".join(shargs)
-        elif short_args_option == ShortArgsOption.NO_DASH:
-            shargs = ' '.join(shargs)
-    else:
-        shargs = ''
-
-    # Largs
-    if (not isinstance(largs, str) and
-        isinstance(largs, Iterable) and
-        len(largs) and
-        all(isinstance(e, str) for e in largs) and
-            len([e for e in largs if e])):
-        largs = [re.sub(r'^-+', '', arg) for arg in largs]
-        largs = " --".join(largs)
-        largs = f"--{largs}"
-    else:
-        largs = ''
-
-    # Return str
-    if shargs:
-        if largs:
-            return f"{shargs} {largs}"
-        else:
-            return shargs
-    else:
-        if largs:
-            return largs
-        else:
-            return ''
-
-
-def quotes_wrapper(path: Union[str, Iterable[str]]) -> str:
-    """
-    Wraps string(s) in "double quotes". In case of Iterable[str] each element
-    is wrapped in its personal double quotes and then elements are concatenated
-    with single whitespace between them.
-
-    Parameters:
-        path (str | Iterable[str]): string or array of strings that needs to be
-            wrapped in double quotes.
-
-    Raises:
-        TypeError: path's type isn't (str | Iterable[str]).
-
-    Returns:
-        str: string wrapped with double quotes.
-    """
-    if isinstance(path, str):
-        path = path.replace('"', R'\"')
-        path = f'"{path}"'
-    elif (isinstance(path, Iterable) and
-          len(path) and
-          all(isinstance(e, str) for e in path)):
-        path = [e.replace('"', R'\"') for e in path]
-        path = f'''"{'" "'.join(path)}"'''
-    else:
-        raise TypeError("path's type must be str or Iterable[str].")
-    return path

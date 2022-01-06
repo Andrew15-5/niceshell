@@ -19,6 +19,9 @@ def normalize_short_and_long_args(
     short_args_option: ShortArgsOption = ShortArgsOption.TOGETHER) -> str: ...
 
 
+def quotes_wrapper(path: Union[str, Iterable[str]]) -> str: ...
+
+
 class Shell:
     command: Union[str, Iterable[str]]
     process: Popen
@@ -53,6 +56,3 @@ class Shell:
 
     def terminate(self): ...
     def wait(self) -> int: ...
-
-
-def quotes_wrapper(path: Union[str, Iterable[str]]) -> str: ...
