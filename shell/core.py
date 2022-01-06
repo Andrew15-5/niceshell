@@ -275,12 +275,7 @@ def quotes_wrapper(path: Union[str, Iterable[str]]) -> str:
             wrapped in double quotes.
 
     Raises:
-        TypeError: path's type isn't (str | Iterable[str]) or type of elements
-            of path (Iterable[str]) are not str.
-        ValueError: spaces in short args which are TOGETHER or
-            any of short args which are TOGETHER is longer than 1 char. or
-            invalid value of short_args_option.
-        IndexError: path (Iterable[str]) is empty.
+        TypeError: path's type isn't (str | Iterable[str]).
 
     Returns:
         str: string wrapped with double quotes.
@@ -288,14 +283,11 @@ def quotes_wrapper(path: Union[str, Iterable[str]]) -> str:
     if isinstance(path, str):
         path = path.replace('"', R'\"')
         path = f'"{path}"'
-    elif isinstance(path, Iterable):
-        if len(path) == 0:
-            raise IndexError("path is empty.")
-        try:
-            path = [e.replace('"', R'\"') for e in path]
-            path = f'''"{'" "'.join(path)}"'''
-        except AttributeError:
-            raise TypeError("type of elements of path must be str.")
+    elif (isinstance(path, Iterable) and
+          len(path) and
+          all(isinstance(e, str) for e in path)):
+        path = [e.replace('"', R'\"') for e in path]
+        path = f'''"{'" "'.join(path)}"'''
     else:
         raise TypeError("path's type must be str or Iterable[str].")
     return path

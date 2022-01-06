@@ -151,22 +151,14 @@ class TestCore:
         with pytest.raises(TypeError):
             wrapper(1)
         with pytest.raises(TypeError):
-            wrapper((1, 2))
-
-        # type of elements of path must be str.
-        with pytest.raises(TypeError):
-            wrapper([1, 2])
-        with pytest.raises(TypeError):
-            wrapper(set("file.txt", 1))
-
-        # path is empty.
-        with pytest.raises(IndexError):
             wrapper([])
+        with pytest.raises(TypeError):
+            wrapper([1])
 
         # Quotes
         assert wrapper('') == '""'
         assert wrapper(' ') == '" "'
-        assert wrapper([' ']) == '" "'
+        assert wrapper(set(' ')) == '" "'
         assert wrapper(['', '']) == '"" ""'
         assert wrapper('file.txt') == R'"file.txt"'
         assert wrapper('The "name".pdf') == R'"The \"name\".pdf"'
