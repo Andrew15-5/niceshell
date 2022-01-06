@@ -33,13 +33,31 @@ class Shell:
     """
 
     def __init__(self, command, stdin=PIPE, stdout=PIPE, stderr=PIPE):
+        """
+        Creates and executes a new process using provided command.
+        Note: if command's type is str then it will be executed using /bin/sh.
+
+        Parameters:
+            command (str | Iterable[str]): shell command that needs to be
+                executed.
+            stdin (int): stdin file descriptor. Default is PIPE.
+            stdout (int): stdout file descriptor. Default is PIPE.
+            stderr (int): stderr file descriptor. Default is PIPE.
+
+        Raises:
+            TypeError: command's type isn't (str | Iterable[str]).
+        """
         self.command = command
         if isinstance(command, str):
             self.process = Popen(command, shell=True,
                                  stdin=stdin, stdout=stdout, stderr=stderr)
-        else:
+        elif (isinstance(command, Iterable) and
+              len(command) and
+              all(isinstance(e, str) for e in command)):
             self.process = Popen(list(command),
                                  stdin=stdin, stdout=stdout, stderr=stderr)
+        else:
+            raise TypeError("command's type must be str or Iterable[str].")
         self.pid = self.process.pid
         self.stdin = self.process.stdin
         self.stdout = self.process.stdout
@@ -110,7 +128,9 @@ class Shell:
 
     def shell(self, command, stdin="parent fd", stdout=PIPE, stderr=PIPE):
         """
-        Gives the ability to chain shell commands.
+        Creates and executes a new process using provided command. Gives the
+        ability to chain shell commands.
+        Note: if command's type is str then it will be executed using /bin/sh.
 
         Parameters:
             command (str | Iterable[str]): shell command that needs to be
@@ -121,10 +141,12 @@ class Shell:
             stdout (int): stdout file descriptor. Default is PIPE.
             stderr (int): stderr file descriptor. Default is PIPE.
 
+        Raises:
+            TypeError: command's type isn't (str | Iterable[str]).
+
         Returns:
             Shell: class instance that can be chained.
         """
-
         if stdin == "parent fd":
             stdin = self.stdout
         shell = Shell(command, stdin, stdout, stderr)

@@ -20,7 +20,7 @@ def normalize_short_and_long_args(
 
 
 class Shell:
-    command: str
+    command: Union[str, Iterable[str]]
     process: Popen
     pid: int
     stdin: IO[AnyStr]
