@@ -17,6 +17,8 @@ class TestCore:
         with pytest.raises(TypeError):
             expose_tilde(1)
         with pytest.raises(TypeError):
+            expose_tilde([])
+        with pytest.raises(TypeError):
             expose_tilde([''])
 
         # Asserts
