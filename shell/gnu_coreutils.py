@@ -87,15 +87,14 @@ def ls(path: Union[str, Iterable[str]] = '',
             purposes). Default is False.
 
     Raises:
-        TypeError: path's type isn't (str | Iterable[str]) or type of elements
-            of path (Iterable[str]) are not str.
+        TypeError: path's type isn't (str | Iterable[str]).
 
     Returns:
         (Shell | str): Shell object of executing command or the command itself.
     """
     if (not isinstance(path, (str, Iterable)) or
             not all(isinstance(e, str) for e in path)):
-        raise TypeError("path must be str or Iterable[str].")
+        raise TypeError("path's type must be str or Iterable[str].")
     if list(path) in ([], ['']):  # Edge cases
         path = ''
     if batch:

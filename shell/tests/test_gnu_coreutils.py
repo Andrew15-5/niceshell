@@ -96,7 +96,7 @@ class TestGNUcoreutils:
     def test_ls(self):
         ls = gnu_coreutils.ls
         # Errors
-        # path must be str or Iterable[str].
+        # path's type must be str or Iterable[str].
         with pytest.raises(TypeError):
             ls(1, test=True)
         with pytest.raises(TypeError):
