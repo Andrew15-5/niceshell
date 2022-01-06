@@ -30,6 +30,18 @@ class TestCore:
         normalize = core.normalize_short_and_long_args
         ShortArgsOption = core.ShortArgsOption
         # Errors
+        # short_args' type must be str or Iterable[str].
+        with pytest.raises(TypeError):
+            normalize(1)
+        with pytest.raises(TypeError):
+            normalize([1])
+
+        # long_args' type must be Iterable[str].
+        with pytest.raises(TypeError):
+            normalize('', '')
+        with pytest.raises(TypeError):
+            normalize('', [1])
+
         # No spaces are allowed in short args which are TOGETHER
         with pytest.raises(ValueError):
             normalize(' ')
@@ -42,7 +54,8 @@ class TestCore:
         with pytest.raises(ValueError):
             normalize(["-ab", 'c'])
 
-        with pytest.raises(ValueError):  # Invalid value of short_args_option.
+        # Invalid value of short_args_option.
+        with pytest.raises(ValueError):
             normalize([], [], True)
 
         # No args
@@ -70,7 +83,6 @@ class TestCore:
         assert normalize(set()) == ''
         assert normalize(['']) == ''
         assert normalize(['', '']) == ''
-        assert normalize(['', 1]) == ''
         # (Iterable[str]) Short args are TOGETHER (default)
         assert normalize(["a"]) == "-a"
         assert normalize(["-a"]) == "-a"
@@ -100,9 +112,6 @@ class TestCore:
         assert normalize(["I=/path/to/smth", "P=/tmp"],
                          [], ShortArgsOption.NO_DASH
                          ) == "I=/path/to/smth P=/tmp"
-        # (Unknown type) Short args
-        assert normalize(1) == ''
-        assert normalize(True) == ''
 
         # (Iterable[str]) Long args
         assert normalize([], ["a"]) == "--a"
@@ -119,9 +128,6 @@ class TestCore:
         assert normalize(
             [],
             ["quiet", "--color=always"]) == "--quiet --color=always"
-        # (Unknown type) Long args
-        assert normalize([], "a") == ''
-        assert normalize([], "-a") == ''
 
         # (Iterable[str]) Shoart and Long args
         assert normalize("qvv", ["all", "color=always"],

@@ -192,6 +192,13 @@ def normalize_short_and_long_args(
     Returns:
         str: string of normalized short and long args.
     """
+    if (not isinstance(short_args, (str, Iterable)) or
+            not all(isinstance(e, str) for e in short_args)):
+        raise TypeError("short_args' type must be str or Iterable[str].")
+    if (not isinstance(long_args, Iterable) or
+        isinstance(long_args, str) or
+            not all(isinstance(e, str) for e in long_args)):
+        raise TypeError("long_args' type must be Iterable[str].")
     if (type(short_args_option) != int or
         short_args_option < 0 or
             short_args_option > ShortArgsOption._last):
