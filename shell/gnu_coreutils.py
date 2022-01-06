@@ -34,21 +34,18 @@ def ln(source_path: Union[str, Iterable[str]],
             purposes). Default is False.
 
     Raises:
-        TypeError: source_path's type isn't (str | Iterable[str]) or type of
-            elements of source_path (Iterable[str]) are not str or
+        TypeError: source_path's type isn't (str | Iterable[str]) or
             destination_path's type isn't str.
-        IndexError: source_path (Iterable[str]) is empty.
 
     Returns:
         (Shell | str): Shell object of executing command or the command itself.
     """
     if (not isinstance(source_path, (str, Iterable)) or
-            not all(isinstance(e, str) for e in source_path)):
-        raise TypeError("source_path must be str or Iterable[str].")
-    elif not isinstance(source_path, str) and len(source_path) == 0:
-        raise IndexError("source_path (Iterable[str]) is empty.")
+        not all(isinstance(e, str) for e in source_path) or
+            (not isinstance(source_path, str) and len(source_path) == 0)):
+        raise TypeError("source_path's type must be str or Iterable[str].")
     if not isinstance(destination_path, str):
-        raise TypeError("destination_path must be str.")
+        raise TypeError("destination_path's type must be str.")
     if batch:
         # Concatenate anything but str (batch)
         if not isinstance(source_path, str):

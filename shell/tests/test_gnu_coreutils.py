@@ -12,19 +12,17 @@ class TestGNUcoreutils:
     def test_ln(self):
         ln = gnu_coreutils.ln
         # Errors
-        # source_path must be str or Iterable[str].
+        # source_path's type must be str or Iterable[str].
         with pytest.raises(TypeError):
             ln(1)
         with pytest.raises(TypeError):
+            ln([])
+        with pytest.raises(TypeError):
             ln([1])
 
-        # source_path (Iterable[str]) is empty.
-        with pytest.raises(IndexError):
-            ln([], '')
-
-        # destination_path must be str.
+        # destination_path's type must be str.
         with pytest.raises(TypeError):
-            ln('*', 1)
+            ln('', 1)
 
         # Asserts batch=False
         def ln(source_path: Union[str, Iterable[str]],
