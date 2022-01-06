@@ -40,6 +40,7 @@ class Shell:
         else:
             self.process = Popen(list(command),
                                  stdin=stdin, stdout=stdout, stderr=stderr)
+        self.pid = self.process.pid
         self.stdin = self.process.stdin
         self.stdout = self.process.stdout
         self.stderr = self.process.stderr
@@ -85,9 +86,27 @@ class Shell:
             output.pop(-1)
         return output
 
+    def kill(self):
+        '''Kills the process (SIGKILL).'''
+        return self.process.kill()
+
     def output(self) -> str:
         '''Returns content of stdout file descriptor.'''
         return self.__print_output(0)
+
+    def poll(self) -> Union[int, None]:
+        """
+        Returns exit code if the process has been completed; otherwise,
+        returns None.
+        """
+        return self.process.poll()
+
+    def send_signal(self, signal: int):
+        """
+        Sends the signal to the process. Does nothing if the process has been
+        completed.
+        """
+        return self.process.send_signal(signal)
 
     def shell(self, command, stdin="parent fd", stdout=PIPE, stderr=PIPE):
         """
@@ -110,6 +129,10 @@ class Shell:
             stdin = self.stdout
         shell = Shell(command, stdin, stdout, stderr)
         return shell
+
+    def terminate(self):
+        '''Terminates the process (SIGTERM).'''
+        return self.process.terminate()
 
     def wait(self) -> int:
         '''Waits the end of the command execution and returns its exit code.'''

@@ -55,10 +55,11 @@ ln(files, "/tmp/").wait()
 
 ## TODO
 
-* [ ] Add remaining Popen methods to Shell class
+* [ ] Add shell() function for chain to start from small 's'
 * [ ] Add cp
 * [ ] Add rm
 * [ ] Add mv
+* [x] Add remaining Popen methods/properties to Shell class
 * [x] Add ln
 * [x] Add ls
 * [x] Add usefull constants (GID, GROUP, HOME, UID, USER)

@@ -22,6 +22,7 @@ def normalize_short_and_long_args(
 class Shell:
     command: str
     process: Popen
+    pid: int
     stdin: IO[AnyStr]
     stdout: IO[AnyStr]
     stderr: IO[AnyStr]
@@ -39,7 +40,10 @@ class Shell:
                   exclude_last_lf: bool = True,
                   stderr: bool = False) -> List[str]: ...
 
+    def kill(self): ...
     def output(self) -> str: ...
+    def poll(self) -> Union[int, None]: ...
+    def send_signal(self, signal: int): ...
 
     def shell(self,
               command: Union[str, Iterable[str]],
@@ -47,6 +51,7 @@ class Shell:
               stdout: int = PIPE,
               stderr: int = PIPE) -> Shell: ...
 
+    def terminate(self): ...
     def wait(self) -> int: ...
 
 
