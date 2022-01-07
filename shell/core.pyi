@@ -22,6 +22,12 @@ def normalize_short_and_long_args(
 def quotes_wrapper(path: Union[str, Iterable[str]]) -> str: ...
 
 
+def shell(command: Union[str, Iterable[str]],
+          stdin: int = PIPE,
+          stdout: int = PIPE,
+          stderr: int = PIPE) -> None: ...
+
+
 class Shell:
     command: Union[str, Iterable[str]]
     process: Popen

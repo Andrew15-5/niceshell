@@ -6,7 +6,7 @@ from typing import Iterable, List, Union
 import regex as re
 
 __all__ = ["expose_tilde", "normalize_short_and_long_args", "quotes_wrapper",
-           "Shell", "ShortArgsOption"]
+           "shell", "Shell", "ShortArgsOption"]
 
 
 def expose_tilde(quoted_path: str) -> str:
@@ -149,6 +149,27 @@ def quotes_wrapper(path: Union[str, Iterable[str]]) -> str:
     else:
         raise TypeError("path's type must be str or Iterable[str].")
     return path
+
+
+def shell(command, stdin=PIPE, stdout=PIPE, stderr=PIPE):
+    """
+    Creates and executes a new process using provided command.
+    Note: if command's type is str then it will be executed using /bin/sh.
+
+    Parameters:
+        command (str | Iterable[str]): shell command that needs to be
+            executed.
+        stdin (int): stdin file descriptor. Default is PIPE.
+        stdout (int): stdout file descriptor. Default is PIPE.
+        stderr (int): stderr file descriptor. Default is PIPE.
+
+    Raises:
+        TypeError: command's type isn't (str | Iterable[str]).
+
+    Returns:
+        Shell: class instance that can be chained.
+    """
+    return Shell(command, stdin, stdout, stderr)
 
 
 class Shell:

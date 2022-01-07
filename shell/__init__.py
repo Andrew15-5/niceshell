@@ -3,13 +3,14 @@ from .core import (
     expose_tilde,
     normalize_short_and_long_args,
     quotes_wrapper,
+    shell,
     Shell,
     ShortArgsOption
 )
 from .gnu_coreutils import ln, ls
 
 __all__ = ["expose_tilde", "GID", "GROUP", "HOME", "ln", "ls",
-           "normalize_short_and_long_args", "quotes_wrapper", "Shell",
+           "normalize_short_and_long_args", "quotes_wrapper", "shell", "Shell",
            "ShortArgsOption", "UID", "USER"]
 
 GID = Shell("id -g").output()[:-1]

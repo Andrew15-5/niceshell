@@ -67,6 +67,7 @@ provides for better understanding of what you are looking for.
   * expose_tilde()
   * normalize_short_and_long_args()
   * quotes_wrapper()
+  * shell()
   * Shell
   * ShortArgsOption
 * gnu_coreutils
@@ -75,10 +76,10 @@ provides for better understanding of what you are looking for.
 
 ## TODO
 
-* [ ] Add shell() function for chain to start from small 's'
 * [ ] Add cp
 * [ ] Add rm
 * [ ] Add mv
+* [x] Add shell() function for chain to start from small 's'
 * [x] Add remaining Popen methods/properties to Shell class
 * [x] Add ln
 * [x] Add ls

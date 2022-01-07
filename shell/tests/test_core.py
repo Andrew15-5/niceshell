@@ -170,6 +170,18 @@ class TestCore:
             ["file.txt", 'The "name".pdf', "The 'name'.pdf"]
         ) == R'''"file.txt" "The \"name\".pdf" "The 'name'.pdf"'''
 
+    def test_shell(self):
+        shell = core.shell
+
+        # Errors
+        # command's type must be str or Iterable[str].
+        with pytest.raises(TypeError):
+            shell(1)
+        with pytest.raises(TypeError):
+            shell([])
+        with pytest.raises(TypeError):
+            shell([1])
+
     def test_Shell(self):
         Shell = core.Shell
 
