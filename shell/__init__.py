@@ -1,16 +1,16 @@
 #!/usr/bin/python3
 from .core import (
-    Shell,
-    ShortArgsOption,
     expose_tilde,
     normalize_short_and_long_args,
-    quotes_wrapper
+    quotes_wrapper,
+    Shell,
+    ShortArgsOption
 )
 from .gnu_coreutils import ln, ls
 
-__all__ = ["GID", "GROUP", "HOME", "Shell", "ShortArgsOption", "UID", "USER",
-           "expose_tilde", "ln", "ls", "normalize_short_and_long_args",
-           "quotes_wrapper"]
+__all__ = ["expose_tilde", "GID", "GROUP", "HOME", "ln", "ls",
+           "normalize_short_and_long_args", "quotes_wrapper", "Shell",
+           "ShortArgsOption", "UID", "USER"]
 
 GID = Shell("id -g").output()[:-1]
 GROUP = Shell("id -gn").output()[:-1]
