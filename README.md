@@ -10,7 +10,9 @@
 ```bash
 git clone https://github.com/Andrew15-5/python-shell-module.git
 cd python-shell-module
-# Create a symlink to the module in ~/.local/lib/${current_python3_version}/site-packages/
+# Copy the module in ~/.local/lib/${current_python3_version}/site-packages/
+./copy_lib.sh
+# Or you can create a symlink instead
 ./link_lib.sh
 ```
 
