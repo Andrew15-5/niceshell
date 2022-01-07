@@ -33,6 +33,24 @@ files = process2.get_lines()
 ln(files, "/tmp/").wait()
 ```
 
+## Important note
+
+Due to different preferences among coders some things like:
+
+* raised error instead of silencly returned error code or None
+* type of raised error and its message;
+* behavior of edge cases (the way parameter's data is handled);
+* parameter names and their ordinal position
+
+can be inconvenient to some extent for someone and be perfect for others.
+Therefore, I encourage everyone to test result of each function, method,
+variable, constant, etc. to be 100% sure of how your
+script/program/app will handle every situation.
+
+There are some tests in "tests" directory (./shell/tests/) to get you
+started. And of course you can see implementation of whatever the module
+provides for better understanding of what you are looking for.
+
 ## Complete list of modules and their function/classes
 
 >Note: list can be extened in future updates.
