@@ -205,13 +205,13 @@ class TestGNUcoreutils:
                   ) == 'ls  -- "dir1" "dir2" "d i r 3"'
         # Test short/long arguments
         assert ls(short_args="a"
-                  ) == 'ls -a --'
+                  ) == "ls -a --"
         assert ls(long_args=["--all"]
-                  ) == 'ls --all --'
+                  ) == "ls --all --"
         assert ls(short_args="ld", long_args=["all"]
-                  ) == 'ls -l -d --all --'
+                  ) == "ls -l -d --all --"
         assert ls(short_args=["-l", "-d"], long_args=["all"]
-                  ) == 'ls -l -d --all --'
+                  ) == "ls -l -d --all --"
         # Test everything
         assert ls(
             ["~/here/*", "~/there/*"], sudo=True,
