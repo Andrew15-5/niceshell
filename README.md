@@ -82,7 +82,6 @@ provides for better understanding of what you are looking for.
 
 ## TODO
 
-* [ ] Replace str.replace with re.sub in normalize_short_and_long_args()
 * [x] Add cd
 * [x] Add mv
 * [x] Add rm

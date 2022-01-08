@@ -74,7 +74,7 @@ def normalize_short_and_long_args(
     if isinstance(shargs, str) and shargs:
         if short_args_option == ShortArgsOption.TOGETHER and shargs.find(' ') > -1:
             raise ValueError("No spaces are allowed in short args (str).")
-        shargs = shargs.replace('-', '')
+        shargs = re.sub(r'^-+', '', shargs)
         if short_args_option == ShortArgsOption.TOGETHER:
             shargs = f"-{shargs}"
         elif short_args_option == ShortArgsOption.APART:
@@ -85,7 +85,7 @@ def normalize_short_and_long_args(
           len(shargs) and
           all(isinstance(e, str) for e in shargs) and
           len([e for e in shargs if e])):
-        shargs = [arg.replace('-', '') for arg in shargs]
+        shargs = [re.sub(r'^-+', '', arg) for arg in shargs]
         if short_args_option == ShortArgsOption.TOGETHER:
             if not all(len(e) == 1 for e in shargs):
                 raise ValueError("Short arguments must be 1 character long.")

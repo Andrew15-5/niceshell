@@ -102,7 +102,7 @@ def cp(source_path: Union[str, Iterable[str]],
     sudo = "sudo" if sudo else ''
     args = normalize_short_and_long_args(
         short_args, long_args, ShortArgsOption.APART)
-    command = f'{sudo} cp {args} -- {source_path} {destination_path}'.strip()
+    command = f"{sudo} cp {args} -- {source_path} {destination_path}".strip()
     if test:
         return command
     else:
@@ -159,7 +159,7 @@ def ln(source_path: Union[str, Iterable[str]],
     sudo = "sudo" if sudo else ''
     args = normalize_short_and_long_args(
         short_args, long_args, ShortArgsOption.APART)
-    command = f'{sudo} ln {args} -- {source_path} {destination_path}'.strip()
+    command = f"{sudo} ln {args} -- {source_path} {destination_path}".strip()
     if test:
         return command
     else:
@@ -208,7 +208,7 @@ def ls(path: Union[str, Iterable[str]] = '',
     sudo = "sudo" if sudo else ''
     args = normalize_short_and_long_args(
         short_args, long_args, ShortArgsOption.APART)
-    command = f'{sudo} ls {args} -- {path}'.strip()
+    command = f"{sudo} ls {args} -- {path}".strip()
     if test:
         return command
     else:
@@ -265,7 +265,7 @@ def mv(source_path: Union[str, Iterable[str]],
     sudo = "sudo" if sudo else ''
     args = normalize_short_and_long_args(
         short_args, long_args, ShortArgsOption.APART)
-    command = f'{sudo} mv {args} -- {source_path} {destination_path}'.strip()
+    command = f"{sudo} mv {args} -- {source_path} {destination_path}".strip()
     if test:
         return command
     else:
@@ -316,7 +316,7 @@ def rm(path: Union[str, Iterable[str]],
     sudo = "sudo" if sudo else ''
     args = normalize_short_and_long_args(
         short_args, long_args, ShortArgsOption.APART)
-    command = f'{sudo} rm {args} -- {path}'.strip()
+    command = f"{sudo} rm {args} -- {path}".strip()
     if test:
         return command
     else:
