@@ -74,11 +74,12 @@ provides for better understanding of what you are looking for.
   * cp()
   * ln()
   * ls()
+  * mv()
   * rm()
 
 ## TODO
 
-* [ ] Add mv
+* [x] Add mv
 * [x] Add rm
 * [x] Add cp
 * [x] Add shell() function for chain to start from small 's'

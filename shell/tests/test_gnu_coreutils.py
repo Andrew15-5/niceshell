@@ -257,6 +257,89 @@ class TestGNUcoreutils:
         assert ls(['"dir 1" "dir 2" dir3/*']
                   ) == 'ls  -- "dir 1" "dir 2" dir3/*'
 
+    def test_mv(self):
+        mv = gnu_coreutils.mv
+        # Errors
+        # source_path's type must be str or Iterable[str].
+        with pytest.raises(TypeError):
+            mv(1)
+        with pytest.raises(TypeError):
+            mv([])
+        with pytest.raises(TypeError):
+            mv([1])
+
+        # destination_path's type must be str.
+        with pytest.raises(TypeError):
+            mv('', 1)
+
+        # Asserts batch=False
+        def mv(source_path: Union[str, Iterable[str]],
+               destination_path: str,
+               sudo=False,
+               short_args: Union[str, Iterable[str]] = [],
+               long_args: Iterable[str] = []) -> str:
+            return gnu_coreutils.mv(source_path, destination_path, False,
+                                    sudo, short_args, long_args, True)
+        # Test simple (edge) cases
+        assert mv('', '') == 'mv  -- "" ""'
+        assert mv([''], '') == 'mv  -- "" ""'
+        assert mv(('', ''), '') == 'mv  -- "" "" ""'
+        assert mv("file", "/tmp") == 'mv  -- "file" "/tmp"'
+        # Test short/long arguments
+        assert mv('', '', short_args="-n") == 'mv -n -- "" ""'
+        assert mv('', '', long_args=["--update"]) == 'mv --update -- "" ""'
+        assert mv('', '', short_args="bf", long_args=["update"]
+                  ) == 'mv -b -f --update -- "" ""'
+        assert mv('', '', short_args=["b", "S .bak"], long_args=["update"]
+                  ) == 'mv -b -S .bak --update -- "" ""'
+        # Test everything
+        assert mv(
+            "/folder with spaces/dir", "/different folder with spaces",
+        ) == 'mv  -- "/folder with spaces/dir" "/different folder with spaces"'
+        assert mv(["../../tmp/file1", "file2", "f i l e 3"], "~/"
+                  ) == 'mv  -- "../../tmp/file1" "file2" "f i l e 3" ~/""'
+        assert mv(
+            ["tmp/dir1", "dir2", "~/d i r 3/src/"], "~", sudo=True,
+            short_args=['f', 'b', "S .bak"], long_args=["verbose"]
+        ) == 'sudo mv -f -b -S .bak --verbose -- "tmp/dir1" "dir2" ~/"d i r 3/src/" ~'
+
+        # Asserts batch=True
+        def mv(source_path: Union[str, Iterable[str]],
+               destination_path: str,
+               sudo=False,
+               short_args: Union[str, Iterable[str]] = [],
+               long_args: Iterable[str] = []) -> str:
+            return gnu_coreutils.mv(source_path, destination_path, True,
+                                    sudo, short_args, long_args, True)
+        # Test simple/edge cases
+        assert mv('', '') == 'mv  --  ""'
+        assert mv([''], '') == 'mv  --  ""'
+        assert mv(('', ''), '') == 'mv  --   ""'
+        assert mv("/file", "/tmp") == 'mv  -- /file "/tmp"'
+        # Test short/long arguments
+        assert mv('', '', short_args="-n") == 'mv -n --  ""'
+        assert mv('', '', long_args=["--update"]) == 'mv --update --  ""'
+        assert mv('', '', short_args="bf", long_args=["update"]
+                  ) == 'mv -b -f --update --  ""'
+        assert mv('', '', short_args=["b", "S .bak"], long_args=["update"]
+                  ) == 'mv -b -S .bak --update --  ""'
+        # Test everything
+        assert mv(
+            ["tmp/dir1", "dir2", "~/dir3/src/*"], "~", sudo=True,
+            short_args=['f', 'b', "S .bak"], long_args=["verbose"]
+        ) == 'sudo mv -f -b -S .bak --verbose -- tmp/dir1 dir2 ~/dir3/src/* ~'
+
+        # Special cases (hacks)
+        # Case #1
+        assert mv("file1 file2", "~/dest"
+                  ) == 'mv  -- file1 file2 ~/"dest"'
+        assert mv(["file1 file2"], "~/dest"
+                  ) == 'mv  -- file1 file2 ~/"dest"'
+
+        # Case #2
+        assert mv(['"/dir 1" dir2/*'], '~', short_args='i'
+                  ) == 'mv -i -- "/dir 1" dir2/* ~'
+
     def test_rm(self):
         rm = gnu_coreutils.rm
         # Errors
