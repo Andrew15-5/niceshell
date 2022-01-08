@@ -3,6 +3,11 @@ from typing import Iterable, Union
 from .core import Shell
 
 
+def cd(path: str = '',
+       short_args: Union[str, Iterable[str]] = [],
+       test=False) -> Union[Shell, str]: ...
+
+
 def cp(source_path: Union[str, Iterable[str]],
        destination_path: str,
        batch: bool = False,

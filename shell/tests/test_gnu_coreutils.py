@@ -9,6 +9,39 @@ from shell import gnu_coreutils
 
 
 class TestGNUcoreutils:
+    def test_cd(self):
+        cd = gnu_coreutils.cd
+        # Errors
+        # path's type must be str.
+        with pytest.raises(TypeError):
+            cd(1)
+
+        # Asserts
+        def cd(path: str = '',
+                short_args: Union[str, Iterable[str]] = []):
+            return gnu_coreutils.cd(path, short_args, True)
+        # Test short arguments
+        assert cd(short_args="-L") == "cd -L --"
+        assert cd(short_args="Pe") == "cd -P -e --"
+        assert cd(short_args=['P', 'e', '@']) == "cd -P -e -@ --"
+
+        # Without wildcard
+        assert cd() == "cd  --"
+        assert cd("path/to/smth"
+                  ) == 'cd  -- "path/to/smth"'
+        assert cd(R'path/with"\*"quotes_and_asterisk'
+                  ) == R'cd  -- "path/with\"*\"quotes_and_asterisk"'
+        assert cd(R'path/with"\\*"quotes_and_asterisk'
+                  ) == R'cd  -- "path/with\"\*\"quotes_and_asterisk"'
+        assert cd(R'path/with"\\\*"quotes_and_asterisk'
+                  ) == R'cd  -- "path/with\"\\*\"quotes_and_asterisk"'
+
+        # With wildcard
+        assert cd("path/t*/s*th"
+                  ) == 'cd  -- "path/t"*"/s"*"th"'
+        assert cd('path/with"*"quotes_and_asterisk'
+                  ) == R'cd  -- "path/with\""*"\"quotes_and_asterisk"'
+
     def test_cp(self):
         cp = gnu_coreutils.cp
         # Errors

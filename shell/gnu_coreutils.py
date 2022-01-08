@@ -1,9 +1,55 @@
 #!/usr/bin/python3
 from typing import Iterable, Union
+from os import chdir
+import regex as re
 
 from .core import *
 
-__all__ = ["cp", "ln", "ls", "mv", "rm"]
+__all__ = ["cd", "cp", "ln", "ls", "mv", "rm"]
+
+
+def cd(path: str = '',
+       short_args: Union[str, Iterable[str]] = [],
+       test=False) -> Union[Shell, str]:
+    R"""
+    Wrapper for cd command from GNU Core Utilities.
+    Note: Path will be wrapped in quotes, but '~' will still work (will
+    be expanded) as well as wildcard (*). To treat '*' as normal character put
+    backslash before it. This function changes directory using os.chdir().
+
+    Parameters:
+        path (str): directory that needs to be a new cwd aka present/current
+            working directory. Default is '' (aka $HOME).
+        short_args (str | Iterable[str]): string or array of short arguments.
+            Prefix-dash is ignored. Default is [] (no short arguments).
+        test (bool): return command itself without its execution (for test
+            purposes). Default is False.
+
+    Raises:
+        TypeError: path's type isn't str.
+
+    Returns:
+        (Shell | str): Shell object of executing command or the command itself.
+    """
+    if not isinstance(path, str):
+        raise TypeError("path's type must be str.")
+    if path:
+        path = expose_tilde(quotes_wrapper(path))
+        path = re.sub(r'(?<=[^\\])\*', '"*"', path)  # Expose wildcard (*)
+        path = re.sub(r'\\{1}\*', '*', path)  # Preserve '*'
+    args = normalize_short_and_long_args(
+        short_args, [], ShortArgsOption.APART)
+    command = f"cd {args} -- {path}".strip()
+    if test:
+        return command
+    else:
+        process = Shell(command)
+        if process.exit_code() == 0:
+            # Necessary if wildcard is present in path
+            process2 = Shell(command + '; echo "|$PWD|"')
+            new_pwd = process2.output().split('|')[-2]
+            chdir(new_pwd)
+        return process
 
 
 def cp(source_path: Union[str, Iterable[str]],

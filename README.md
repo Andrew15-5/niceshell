@@ -71,6 +71,7 @@ provides for better understanding of what you are looking for.
   * Shell
   * ShortArgsOption
 * gnu_coreutils
+  * cd()
   * cp()
   * ln()
   * ls()
@@ -79,6 +80,7 @@ provides for better understanding of what you are looking for.
 
 ## TODO
 
+* [x] Add cd
 * [x] Add mv
 * [x] Add rm
 * [x] Add cp
