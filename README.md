@@ -3,11 +3,13 @@
 ## Before using it you'll need
 
 * Python 3.5+ (tested on 3.8.10)
+* Pip (to install modules-dependencies)
 * Bash (to run link_lib.sh)
 
 ## Installation
 
 ```bash
+python3 -m pip install --user -U regex pytest # pytest is to run tests
 git clone https://github.com/Andrew15-5/python-shell-module.git
 cd python-shell-module
 # Copy the module in ~/.local/lib/${current_python3_version}/site-packages/
@@ -80,6 +82,7 @@ provides for better understanding of what you are looking for.
 
 ## TODO
 
+* [ ] Replace str.replace with re.sub in normalize_short_and_long_args()
 * [x] Add cd
 * [x] Add mv
 * [x] Add rm
