@@ -55,9 +55,9 @@ There are some tests in "tests" directory (./shell/tests/) to get you
 started. And of course you can see implementation of whatever the module
 provides for better understanding of what you are looking for.
 
-## Complete list of modules and their function/classes
+## Complete list of modules and their functions/classes
 
->Note: list can be extened in future updates.
+>Note: list can be exteneded in future updates.
 
 * \_\_init__
   * GID   ($USER's group ID)
