@@ -3,7 +3,7 @@ from typing import Iterable, Union
 
 from .core import *
 
-__all__ = ["cp", "ln", "ls"]
+__all__ = ["cp", "ln", "ls", "rm"]
 
 
 def cp(source_path: Union[str, Iterable[str]],
@@ -163,6 +163,57 @@ def ls(path: Union[str, Iterable[str]] = '',
     args = normalize_short_and_long_args(
         short_args, long_args, ShortArgsOption.APART)
     command = f'{sudo} ls {args} -- {path}'.strip()
+    if test:
+        return command
+    else:
+        return Shell(command)
+
+
+def rm(path: Union[str, Iterable[str]],
+       batch=False,
+       sudo=False,
+       short_args: Union[str, Iterable[str]] = [],
+       long_args: Iterable[str] = [],
+       test=False) -> Union[Shell, str]:
+    """
+    Wrapper for rm command from GNU Core Utilities.
+    Note: If path is wrapped in quotes (batch=False), '~' will still work (will
+    be expanded).
+
+        source_path (str | Iterable[str]): file(s) and/or directory(-ies) that
+            is/are need to be removed.
+    Parameters:
+        path (str | Iterable[str]): file(s) and/or directory(-ies) that is/are
+            need to be removed.
+        batch (bool): wraps path in double quotes if False. Default is False.
+        sudo (bool): adds sudo at the begining of rm command. Default is False.
+        short_args (str | Iterable[str]): string or array of short arguments.
+            Prefix-dash is ignored. Default is [] (no short arguments).
+        long_args (Iterable[str]): array of long arguments. Prefix-dashes are
+            ignored. Default is [] (no long arguments).
+        test (bool): return command itself without its execution (for test
+            purposes). Default is False.
+
+    Raises:
+        TypeError: path's type isn't (str | Iterable[str]).
+
+    Returns:
+        (Shell | str): Shell object of executing command or the command itself.
+    """
+    if (not isinstance(path, (str, Iterable)) or
+        not all(isinstance(e, str) for e in path) or
+            (not isinstance(path, str) and len(path) == 0)):
+        raise TypeError("path's type must be str or Iterable[str].")
+    if batch:
+        # Concatenate anything but str (batch)
+        if not isinstance(path, str):
+            path = ' '.join(path)
+    else:
+        path = expose_tilde(quotes_wrapper(path))
+    sudo = "sudo" if sudo else ''
+    args = normalize_short_and_long_args(
+        short_args, long_args, ShortArgsOption.APART)
+    command = f'{sudo} rm {args} -- {path}'.strip()
     if test:
         return command
     else:

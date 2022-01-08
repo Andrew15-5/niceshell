@@ -257,6 +257,82 @@ class TestGNUcoreutils:
         assert ls(['"dir 1" "dir 2" dir3/*']
                   ) == 'ls  -- "dir 1" "dir 2" dir3/*'
 
+    def test_rm(self):
+        rm = gnu_coreutils.rm
+        # Errors
+        # path's type must be str or Iterable[str].
+        with pytest.raises(TypeError):
+            rm(1)
+        with pytest.raises(TypeError):
+            rm([])
+        with pytest.raises(TypeError):
+            rm([1])
+
+        # Asserts batch=False
+        def rm(path: Union[str, Iterable[str]],
+               sudo=False,
+               short_args: Union[str, Iterable[str]] = [],
+               long_args: Iterable[str] = []) -> str:
+            return gnu_coreutils.rm(
+                path, False, sudo, short_args, long_args, True)
+        # Test simple (edge) cases
+        assert rm('') == 'rm  -- ""'
+        assert rm(['']) == 'rm  -- ""'
+        assert rm(('')) == 'rm  -- ""'
+        assert rm("file") == 'rm  -- "file"'
+        # Test short/long arguments
+        assert rm('', short_args="-r") == 'rm -r -- ""'
+        assert rm('', long_args=["--force"]) == 'rm --force -- ""'
+        assert rm('', short_args="rI", long_args=["force"]
+                  ) == 'rm -r -I --force -- ""'
+        assert rm('', short_args=["r", "I"], long_args=["force"]
+                  ) == 'rm -r -I --force -- ""'
+        # Test everything
+        assert rm("/folder with spaces/dir", short_args='r'
+                  ) == 'rm -r -- "/folder with spaces/dir"'
+        assert rm(["../../tmp/file1", "file2", "f i l e 3"]
+                  ) == 'rm  -- "../../tmp/file1" "file2" "f i l e 3"'
+        assert rm(
+            ["tmp/dir1", "dir2", "~/d i r 3/src/"], sudo=True,
+            short_args=['r', 'f', "I"], long_args=["verbose"]
+        ) == 'sudo rm -r -f -I --verbose -- "tmp/dir1" "dir2" ~/"d i r 3/src/"'
+
+        # Asserts batch=True
+        def rm(path: Union[str, Iterable[str]],
+               sudo=False,
+               short_args: Union[str, Iterable[str]] = [],
+               long_args: Iterable[str] = []) -> str:
+            return gnu_coreutils.rm(
+                path, True, sudo, short_args, long_args, True)
+        # Test simple/edge cases
+        assert rm('') == "rm  --"
+        assert rm(['']) == "rm  --"
+        assert rm(('')) == "rm  --"
+        assert rm("file") == "rm  -- file"
+        # Test short/long arguments
+        assert rm('', short_args="-r") == "rm -r --"
+        assert rm('', long_args=["--force"]) == "rm --force --"
+        assert rm('', short_args="rI", long_args=["force"]
+                  ) == "rm -r -I --force --"
+        assert rm('', short_args=["r", "I"], long_args=["force"]
+                  ) == "rm -r -I --force --"
+        # Test everything
+        assert rm(
+            ["tmp/dir1", "dir2", "~/dir3/src/*"], sudo=True,
+            short_args=['r', 'f', "I"], long_args=["verbose"]
+        ) == "sudo rm -r -f -I --verbose -- tmp/dir1 dir2 ~/dir3/src/*"
+
+        # Special cases (hacks)
+        # Case #1
+        assert rm("file1 file2"
+                  ) == "rm  -- file1 file2"
+        assert rm(["file1 file2"]
+                  ) == "rm  -- file1 file2"
+
+        # Case #2
+        assert rm(['"/dir 1" dir2/*'], short_args='r'
+                  ) == 'rm -r -- "/dir 1" dir2/*'
+
 
 if __name__ == "__main__":
     pytest.main()
