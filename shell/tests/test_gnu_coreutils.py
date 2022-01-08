@@ -126,8 +126,8 @@ class TestGNUcoreutils:
         assert ln('', '', long_args=["--force"]) == 'ln --force -- "" ""'
         assert ln('', '', short_args="rs", long_args=["force"]
                   ) == 'ln -r -s --force -- "" ""'
-        assert ln('', '', short_args=["r", "S bak"], long_args=["all"]
-                  ) == 'ln -r -S bak --all -- "" ""'
+        assert ln('', '', short_args=["r", "S .bak"], long_args=["all"]
+                  ) == 'ln -r -S .bak --all -- "" ""'
         # Test everything
         assert ln(
             "/folder with spaces/dir", "/different folder with spaces",
@@ -136,9 +136,9 @@ class TestGNUcoreutils:
         assert ln(["../../tmp/file1", "file2", "f i l e 3"], "~/"
                   ) == 'ln  -- "../../tmp/file1" "file2" "f i l e 3" ~/""'
         assert ln(
-            ["tmp/dir1", "dir2", "~/d i r 3/src/"], "~/", sudo=True,
+            ["tmp/dir1", "dir2", "~/d i r 3/src/"], "~", sudo=True,
             short_args=['r', 's', 'f', "S .bak"], long_args=["verbose"]
-        ) == 'sudo ln -r -s -f -S .bak --verbose -- "tmp/dir1" "dir2" ~/"d i r 3/src/" ~/""'
+        ) == 'sudo ln -r -s -f -S .bak --verbose -- "tmp/dir1" "dir2" ~/"d i r 3/src/" ~'
 
         # Asserts batch=True
         def ln(source_path: Union[str, Iterable[str]],
@@ -158,8 +158,8 @@ class TestGNUcoreutils:
         assert ln('', '', long_args=["--force"]) == 'ln --force --  ""'
         assert ln('', '', short_args="rs", long_args=["force"]
                   ) == 'ln -r -s --force --  ""'
-        assert ln('', '', short_args=["r", "S bak"], long_args=["all"]
-                  ) == 'ln -r -S bak --all --  ""'
+        assert ln('', '', short_args=["r", "S .bak"], long_args=["all"]
+                  ) == 'ln -r -S .bak --all --  ""'
         # Test everything
         assert ln(
             ["tmp/dir1", "dir2", "~/dir3/src/*"], "~", sudo=True,
