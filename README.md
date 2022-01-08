@@ -71,14 +71,15 @@ provides for better understanding of what you are looking for.
   * Shell
   * ShortArgsOption
 * gnu_coreutils
+  * cp()
   * ln()
   * ls()
 
 ## TODO
 
-* [ ] Add cp
 * [ ] Add rm
 * [ ] Add mv
+* [x] Add cp
 * [x] Add shell() function for chain to start from small 's'
 * [x] Add remaining Popen methods/properties to Shell class
 * [x] Add ln

@@ -9,6 +9,90 @@ from shell import gnu_coreutils
 
 
 class TestGNUcoreutils:
+    def test_cp(self):
+        cp = gnu_coreutils.cp
+        # Errors
+        # source_path's type must be str or Iterable[str].
+        with pytest.raises(TypeError):
+            cp(1)
+        with pytest.raises(TypeError):
+            cp([])
+        with pytest.raises(TypeError):
+            cp([1])
+
+        # destination_path's type must be str.
+        with pytest.raises(TypeError):
+            cp('', 1)
+
+        # Asserts batch=False
+        def cp(source_path: Union[str, Iterable[str]],
+               destination_path: str,
+               sudo=False,
+               short_args: Union[str, Iterable[str]] = [],
+               long_args: Iterable[str] = []) -> str:
+            return gnu_coreutils.cp(source_path, destination_path, False,
+                                    sudo, short_args, long_args, True)
+        # Test simple (edge) cases
+        assert cp('', '') == 'cp  -- "" ""'
+        assert cp([''], '') == 'cp  -- "" ""'
+        assert cp(('', ''), '') == 'cp  -- "" "" ""'
+        assert cp("file", "/tmp") == 'cp  -- "file" "/tmp"'
+        # Test short/long arguments
+        assert cp('', '', short_args="-r") == 'cp -r -- "" ""'
+        assert cp('', '', long_args=["--update"]) == 'cp --update -- "" ""'
+        assert cp('', '', short_args="rf", long_args=["update"]
+                  ) == 'cp -r -f --update -- "" ""'
+        assert cp('', '', short_args=["r", "S .bak"], long_args=["update"]
+                  ) == 'cp -r -S .bak --update -- "" ""'
+        # Test everything
+        assert cp(
+            "/folder with spaces/dir", "/different folder with spaces",
+            short_args='r'
+        ) == 'cp -r -- "/folder with spaces/dir" "/different folder with spaces"'
+        assert cp(["../../tmp/file1", "file2", "f i l e 3"], "~/"
+                  ) == 'cp  -- "../../tmp/file1" "file2" "f i l e 3" ~/""'
+        assert cp(
+            ["tmp/dir1", "dir2", "~/d i r 3/src/"], "~", sudo=True,
+            short_args=['r', 'f', 'b', "S .bak"], long_args=["verbose"]
+        ) == 'sudo cp -r -f -b -S .bak --verbose -- "tmp/dir1" "dir2" ~/"d i r 3/src/" ~'
+
+        # Asserts batch=True
+        def cp(source_path: Union[str, Iterable[str]],
+               destination_path: str,
+               sudo=False,
+               short_args: Union[str, Iterable[str]] = [],
+               long_args: Iterable[str] = []) -> str:
+            return gnu_coreutils.cp(source_path, destination_path, True,
+                                    sudo, short_args, long_args, True)
+        # Test simple/edge cases
+        assert cp('', '') == 'cp  --  ""'
+        assert cp([''], '') == 'cp  --  ""'
+        assert cp(('', ''), '') == 'cp  --   ""'
+        assert cp("/file", "/tmp") == 'cp  -- /file "/tmp"'
+        # Test short/long arguments
+        assert cp('', '', short_args="-r") == 'cp -r --  ""'
+        assert cp('', '', long_args=["--update"]) == 'cp --update --  ""'
+        assert cp('', '', short_args="rf", long_args=["update"]
+                  ) == 'cp -r -f --update --  ""'
+        assert cp('', '', short_args=["r", "S .bak"], long_args=["update"]
+                  ) == 'cp -r -S .bak --update --  ""'
+        # Test everything
+        assert cp(
+            ["tmp/dir1", "dir2", "~/dir3/src/*"], "~", sudo=True,
+            short_args=['r', 'f', 'b', "S .bak"], long_args=["verbose"]
+        ) == 'sudo cp -r -f -b -S .bak --verbose -- tmp/dir1 dir2 ~/dir3/src/* ~'
+
+        # Special cases (hacks)
+        # Case #1
+        assert cp("file1 file2", "~/dest"
+                  ) == 'cp  -- file1 file2 ~/"dest"'
+        assert cp(["file1 file2"], "~/dest"
+                  ) == 'cp  -- file1 file2 ~/"dest"'
+
+        # Case #2
+        assert cp(['"/dir 1" dir2/*'], '~', short_args='r'
+                  ) == 'cp -r -- "/dir 1" dir2/* ~'
+
     def test_ln(self):
         ln = gnu_coreutils.ln
         # Errors

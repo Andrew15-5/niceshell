@@ -7,9 +7,9 @@ from .core import (
     Shell,
     ShortArgsOption
 )
-from .gnu_coreutils import ln, ls
+from .gnu_coreutils import cp, ln, ls
 
-__all__ = ["expose_tilde", "GID", "GROUP", "HOME", "ln", "ls",
+__all__ = ["cp", "expose_tilde", "GID", "GROUP", "HOME", "ln", "ls",
            "normalize_short_and_long_args", "quotes_wrapper", "shell", "Shell",
            "ShortArgsOption", "UID", "USER"]
 
