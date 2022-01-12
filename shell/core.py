@@ -155,11 +155,16 @@ def shell(command, stdin=PIPE, stdout=PIPE, stderr=PIPE):
     """
     Creates and executes a new process using provided command.
     Note: if command's type is str then it will be executed using /bin/sh.
+    If stdin type is str than Popen's stdin value will still be PIPE but
+    provided string will be used as input for shell command; commnad will
+    be executed immediately (ability to chain shell() will be lost). sudo
+    prompt (if appears) will consume all input string.
 
     Parameters:
         command (str | Iterable[str]): shell command that needs to be
             executed.
-        stdin (int): stdin file descriptor. Default is PIPE.
+        stdin (str | int): stdin file descriptor or input text for command.
+            Default is PIPE.
         stdout (int): stdout file descriptor. Default is PIPE.
         stderr (int): stderr file descriptor. Default is PIPE.
 
@@ -189,11 +194,16 @@ class Shell:
         """
         Creates and executes a new process using provided command.
         Note: if command's type is str then it will be executed using /bin/sh.
+        If stdin type is str than Popen's stdin value will still be PIPE but
+        provided string will be used as input for shell command; commnad will
+        be executed immediately (ability to chain shell() will be lost); sudo
+        prompt (if appears) will consume all input string.
 
         Parameters:
             command (str | Iterable[str]): shell command that needs to be
                 executed.
-            stdin (int): stdin file descriptor. Default is PIPE.
+            stdin (str | int): stdin file descriptor or input text for command.
+                Default is PIPE.
             stdout (int): stdout file descriptor. Default is PIPE.
             stderr (int): stderr file descriptor. Default is PIPE.
 
@@ -201,6 +211,11 @@ class Shell:
             TypeError: command's type isn't (str | Iterable[str]).
         """
         self.command = command
+        self.input_text = None
+        self.timeout = None
+        if isinstance(stdin, str):
+            self.input_text = stdin
+            stdin = PIPE
         if isinstance(command, str):
             self.process = Popen(command, shell=True,
                                  stdin=stdin, stdout=stdout, stderr=stderr)
@@ -219,11 +234,17 @@ class Shell:
         self.__error_output = None
         self.__exit_code = None
         self.__output = None
+        if self.input_text is not None:
+            self.__get_communicate()
 
     def __get_communicate(self) -> Tuple[bytes, bytes]:
+        _bytes = None
+        if self.input_text is not None:
+            _bytes = bytes(self.input_text, "utf-8")
         if self.__communicate is None:
             try:
-                self.__communicate = self.process.communicate()
+                self.__communicate = self.process.communicate(
+                    _bytes, self.timeout)
             except KeyboardInterrupt:
                 self.__communicate = self.process.communicate()
         return self.__communicate
@@ -264,6 +285,30 @@ class Shell:
             output.pop(-1)
         return output
 
+    def input(self, text='', timeout=None):
+        """
+        Passes text as input for shell command, then waits for timeout seconds
+        for command to finish or waits utill command is finished (if
+        timeout=None).
+        Note: if timeout > 0 (or None) than it will stall the program for
+        timeout seconds (until it's finished).
+
+        Parameters:
+            text (str): input for shell command. Default is ''.
+            timeout (float | None): amout of seconds to wait. Default is None.
+
+        Raises:
+            TimeoutExpired: if timeout time is out but command didn't finish
+            (timeout: float).
+
+        Returns:
+            Shell: object from which this method was invoked.
+        """
+        self.input_text = text
+        self.timeout = timeout
+        self.__get_communicate()
+        return self
+
     def kill(self):
         '''Kills the process (SIGKILL).'''
         return self.process.kill()
@@ -293,13 +338,17 @@ class Shell:
         Creates and executes a new process using provided command. Gives the
         ability to chain shell commands.
         Note: if command's type is str then it will be executed using /bin/sh.
+        If stdin type is str than Popen's stdin value will still be PIPE but
+        provided string will be used as input for shell command; commnad will
+        be executed immediately (ability to chain shell() will be lost). sudo
+        prompt (if appears) will consume all input string.
 
         Parameters:
             command (str | Iterable[str]): shell command that needs to be
                 executed.
-            stdin (int): stdin file descriptor. Default is "parent fd" aka
-                self.stdout (to gain ability of chaining shell commands aka
-                piping).
+            stdin (str | int): stdin file descriptor or input text for command.
+                Default is "parent fd" aka self.stdout (to gain ability of
+                chaining shell commands aka piping).
             stdout (int): stdout file descriptor. Default is PIPE.
             stderr (int): stderr file descriptor. Default is PIPE.
 

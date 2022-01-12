@@ -45,6 +45,7 @@ Due to different preferences among coders some things like:
 * type of raised error and its message;
 * behavior of edge cases (the way parameter's data is handled);
 * parameter names and their ordinal position
+* behavior of command with provided input text (with sudo)
 
 can be inconvenient to some extent for someone and be perfect for others.
 Therefore, I encourage everyone to test result of each function, method,
@@ -82,6 +83,7 @@ provides for better understanding of what you are looking for.
 
 ## TODO
 
+* [x] Add ability to provide input to command in core.Shell
 * [x] Add cd
 * [x] Add mv
 * [x] Add rm
@@ -91,4 +93,3 @@ provides for better understanding of what you are looking for.
 * [x] Add ln
 * [x] Add ls
 * [x] Add usefull constants (GID, GROUP, HOME, UID, USER)
-* [x] Add Shell class

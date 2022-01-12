@@ -30,15 +30,17 @@ def shell(command: Union[str, Iterable[str]],
 
 class Shell:
     command: Union[str, Iterable[str]]
+    input_text: Union[str, None]
     process: Popen
     pid: int
     stdin: IO[AnyStr]
     stdout: IO[AnyStr]
     stderr: IO[AnyStr]
+    timeout: Union[float, None]
 
     def __init__(self,
                  command: Union[str, Iterable[str]],
-                 stdin: int = PIPE,
+                 stdin: Union[str, int] = PIPE,
                  stdout: int = PIPE,
                  stderr: int = PIPE) -> None: ...
 
@@ -48,6 +50,10 @@ class Shell:
     def get_lines(self,
                   exclude_last_lf: bool = True,
                   stderr: bool = False) -> List[str]: ...
+
+    def input(self,
+              text: str = '',
+              timeout: Union[float, None] = None) -> Shell: ...
 
     def kill(self): ...
     def output(self) -> str: ...
