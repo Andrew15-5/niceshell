@@ -73,6 +73,8 @@ provides for better understanding of what you are looking for.
   * shell()
   * Shell
   * ShortArgsOption
+* extra
+  * can_be_root()
 * gnu_coreutils
   * cd()
   * cp()
@@ -83,6 +85,7 @@ provides for better understanding of what you are looking for.
 
 ## TODO
 
+* [x] Add function that check if sudo can be used without password
 * [x] Add ability to provide input to command in core.Shell
 * [x] Add cd
 * [x] Add mv
@@ -92,4 +95,3 @@ provides for better understanding of what you are looking for.
 * [x] Add remaining Popen methods/properties to Shell class
 * [x] Add ln
 * [x] Add ls
-* [x] Add usefull constants (GID, GROUP, HOME, UID, USER)
