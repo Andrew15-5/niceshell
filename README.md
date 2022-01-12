@@ -76,6 +76,7 @@ provides for better understanding of what you are looking for.
 * extra
   * force_sudo_password_promt()
   * get_root_privileges()
+  * get_root_privileges_or_exit()
   * has_root_privileges()
 * gnu_coreutils
   * cd()

@@ -10,13 +10,14 @@ from .core import (
 from .extra import (
     force_sudo_password_promt,
     get_root_privileges,
+    get_root_privileges_or_exit,
     has_root_privileges
 )
 from .gnu_coreutils import cd, cp, ln, ls, mv, rm
 
 __all__ = ["cd", "cp", "expose_tilde", "force_sudo_password_promt",
-           "get_root_privileges", "GID", "GROUP", "HOME",
-           "has_root_privileges", "ln", "ls", "mv",
+           "get_root_privileges", "get_root_privileges_or_exit", "GID",
+           "GROUP", "HOME", "has_root_privileges", "ln", "ls", "mv",
            "normalize_short_and_long_args", "quotes_wrapper", "rm", "shell",
            "Shell", "ShortArgsOption", "UID", "USER"]
 
