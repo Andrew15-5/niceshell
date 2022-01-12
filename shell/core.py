@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from inspect import cleandoc
 from subprocess import PIPE, Popen
-from typing import Iterable, List, Union
+from typing import Iterable, List, Tuple, Union
 
 import regex as re
 
@@ -180,7 +180,7 @@ class Shell:
 
     Note: After instanciating this class (executing shell command) Python does
     not wait for the end of the command execution. In order to do that you have
-    to invoke any method except shell().
+    to invoke any method except shell(), poll(), send_signal().
 
     P.S. subprocess.Popen is used as a base.
     """
@@ -216,23 +216,30 @@ class Shell:
         self.stdout = self.process.stdout
         self.stderr = self.process.stderr
         self.__communicate = None
+        self.__error_output = None
+        self.__exit_code = None
+        self.__output = None
 
-    def __print_output(self, index: int) -> str:
+    def __get_communicate(self) -> Tuple[bytes, bytes]:
         if self.__communicate is None:
-            self.__communicate = self.process.communicate()
-        return self.__communicate[index].decode("utf-8")
+            try:
+                self.__communicate = self.process.communicate()
+            except KeyboardInterrupt:
+                self.__communicate = self.process.communicate()
+        return self.__communicate
 
     def error_output(self) -> str:
         '''Returns content of stderr file descriptor.'''
-        return self.__print_output(1)
+        if self.__error_output is None:
+            self.__error_output = self.__get_communicate()[1].decode("utf-8")
+        return self.__error_output
 
     def exit_code(self) -> int:
         '''Waits the end of the command execution and returns its exit code.'''
-        try:
-            self.__communicate = self.process.communicate()
-        except KeyboardInterrupt:
-            pass
-        return self.process.wait()
+        if self.__exit_code is None:
+            self.__get_communicate()
+            self.__exit_code = self.process.returncode
+        return self.__exit_code
 
     def get_lines(self, exclude_last_lf=True, stderr=False) -> List[str]:
         R"""
@@ -263,7 +270,9 @@ class Shell:
 
     def output(self) -> str:
         '''Returns content of stdout file descriptor.'''
-        return self.__print_output(0)
+        if self.__output is None:
+            self.__output = self.__get_communicate()[0].decode("utf-8")
+        return self.__output
 
     def poll(self) -> Union[int, None]:
         """
