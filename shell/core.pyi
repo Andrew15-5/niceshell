@@ -1,8 +1,6 @@
 from subprocess import PIPE, Popen
 from typing import AnyStr, IO, Iterable, List, Union
 
-from .core import *
-
 
 def expose_tilde(quoted_path: str) -> str: ...
 
