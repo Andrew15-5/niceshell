@@ -8,11 +8,11 @@ from shell import extra
 
 
 class TestExtra:
-    def test_can_be_root(self):
-        assert type(extra.can_be_root()) == bool
-
     def test_force_sudo_password_promt(self):
         assert extra.force_sudo_password_promt() == None
+
+    def test_has_root_privileges(self):
+        assert type(extra.has_root_privileges()) == bool
 
 
 if __name__ == "__main_ ":

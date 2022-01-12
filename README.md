@@ -74,7 +74,7 @@ provides for better understanding of what you are looking for.
   * Shell
   * ShortArgsOption
 * extra
-  * can_be_root()
+  * has_root_privileges()
   * force_sudo_password_promt()
 * gnu_coreutils
   * cd()
