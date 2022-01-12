@@ -74,8 +74,9 @@ provides for better understanding of what you are looking for.
   * Shell
   * ShortArgsOption
 * extra
-  * has_root_privileges()
   * force_sudo_password_promt()
+  * get_root_privileges()
+  * has_root_privileges()
 * gnu_coreutils
   * cd()
   * cp()
