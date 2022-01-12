@@ -75,6 +75,7 @@ provides for better understanding of what you are looking for.
   * ShortArgsOption
 * extra
   * can_be_root()
+  * force_sudo_password_promt()
 * gnu_coreutils
   * cd()
   * cp()

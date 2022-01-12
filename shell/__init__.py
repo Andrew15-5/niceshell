@@ -7,10 +7,11 @@ from .core import (
     Shell,
     ShortArgsOption
 )
-from .extra import can_be_root
+from .extra import can_be_root, force_sudo_password_promt
 from .gnu_coreutils import cd, cp, ln, ls, mv, rm
 
-__all__ = ["can_be_root", "cd", "cp", "expose_tilde", "GID", "GROUP", "HOME", "ln", "ls",
+__all__ = ["can_be_root", "cd", "cp", "expose_tilde",
+           "force_sudo_password_promt", "GID", "GROUP", "HOME", "ln", "ls",
            "mv", "normalize_short_and_long_args", "quotes_wrapper", "rm",
            "shell", "Shell", "ShortArgsOption", "UID", "USER"]
 
