@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 from inspect import cleandoc
+from os import close, pipe, write
 from subprocess import PIPE, Popen
 from typing import Iterable, List, Tuple, Union
 
@@ -151,19 +152,21 @@ def quotes_wrapper(path: Union[str, Iterable[str]]) -> str:
     return path
 
 
-def shell(command, stdin=PIPE, stdout=PIPE, stderr=PIPE):
+def shell(command, input_text=None, stdin=PIPE, stdout=PIPE, stderr=PIPE):
     """
     Creates and executes a new process using provided command.
-    Note: if command's type is str then it will be executed using /bin/sh.
-    If stdin type is str than Popen's stdin value will still be PIPE but
-    provided string will be used as input for shell command; commnad will
-    be executed immediately (ability to chain shell() will be lost). sudo
-    prompt (if appears) will consume all input string.
+
+    Notes:
+    • if command's type is str then it will be executed using /bin/sh.
+    • if input_text was provided then it will be used as input for shell
+      command which will be executed immediately (may result in program
+      stall). sudo prompt (if appears) will consume all input string.
 
     Parameters:
         command (str | Iterable[str]): shell command that needs to be
             executed.
-        stdin (str | int): stdin file descriptor or input text for command.
+        input_text (str | None): input text for command. Default is None.
+        stdin (str | int): stdin file descriptor or piped text for command.
             Default is PIPE.
         stdout (int): stdout file descriptor. Default is PIPE.
         stderr (int): stderr file descriptor. Default is PIPE.
@@ -174,7 +177,7 @@ def shell(command, stdin=PIPE, stdout=PIPE, stderr=PIPE):
     Returns:
         Shell: class instance that can be chained.
     """
-    return Shell(command, stdin, stdout, stderr)
+    return Shell(command, input_text, stdin, stdout, stderr)
 
 
 class Shell:
@@ -190,19 +193,22 @@ class Shell:
     P.S. subprocess.Popen is used as a base.
     """
 
-    def __init__(self, command, stdin=PIPE, stdout=PIPE, stderr=PIPE):
+    def __init__(self, command, input_text=None,
+                 stdin=PIPE, stdout=PIPE, stderr=PIPE):
         """
         Creates and executes a new process using provided command.
-        Note: if command's type is str then it will be executed using /bin/sh.
-        If stdin type is str than Popen's stdin value will still be PIPE but
-        provided string will be used as input for shell command; commnad will
-        be executed immediately (ability to chain shell() will be lost); sudo
-        prompt (if appears) will consume all input string.
+
+        Notes:
+        • if command's type is str then it will be executed using /bin/sh.
+        • if input_text was provided then it will be used as input for shell
+          command which will be executed immediately (may result in program
+          stall). sudo prompt (if appears) will consume all input string.
 
         Parameters:
             command (str | Iterable[str]): shell command that needs to be
                 executed.
-            stdin (str | int): stdin file descriptor or input text for command.
+            input_text (str | None): input text for command. Default is None.
+            stdin (str | int): stdin file descriptor or piped text for command.
                 Default is PIPE.
             stdout (int): stdout file descriptor. Default is PIPE.
             stderr (int): stderr file descriptor. Default is PIPE.
@@ -213,9 +219,10 @@ class Shell:
         self.command = command
         self.input_text = None
         self.timeout = None
+        if input_text is not None:
+            self.input_text = input_text
         if isinstance(stdin, str):
-            self.input_text = stdin
-            stdin = PIPE
+            stdin = self.__create_stdout_fd(stdin)
         if isinstance(command, str):
             self.process = Popen(command, shell=True,
                                  stdin=stdin, stdout=stdout, stderr=stderr)
@@ -236,6 +243,12 @@ class Shell:
         self.__output = None
         if self.input_text is not None:
             self.__get_communicate()
+
+    def __create_stdout_fd(self, text: str) -> int:
+        std_out, std_in = pipe()
+        write(std_in, bytes(text, "utf-8"))
+        close(std_in)
+        return std_out
 
     def __get_communicate(self) -> Tuple[bytes, bytes]:
         _bytes = None
@@ -290,7 +303,7 @@ class Shell:
         Passes text as input for shell command, then waits for timeout seconds
         for command to finish or waits utill command is finished (if
         timeout=None).
-        Note: if timeout > 0 (or None) than it will stall the program for
+        Note: if timeout > 0 (or None) then it will stall the program for
         timeout seconds (until it's finished).
 
         Parameters:
@@ -333,20 +346,27 @@ class Shell:
         """
         return self.process.send_signal(signal)
 
-    def shell(self, command, stdin="parent fd", stdout=PIPE, stderr=PIPE):
+    def shell(self, command, input_text=None,
+              stdin="parent fd", stdout=PIPE, stderr=PIPE):
         """
         Creates and executes a new process using provided command. Gives the
         ability to chain shell commands.
-        Note: if command's type is str then it will be executed using /bin/sh.
-        If stdin type is str than Popen's stdin value will still be PIPE but
-        provided string will be used as input for shell command; commnad will
-        be executed immediately (ability to chain shell() will be lost). sudo
-        prompt (if appears) will consume all input string.
+
+        Notes:
+        • if command's type is str then it will be executed using /bin/sh.
+        • if input_text was provided then it will be used as input for shell
+          command which will be executed immediately (may result in program
+          stall). sudo prompt (if appears) will consume all input string.
+        • if stdin's type is str then this method (on every call) will create 2
+          file descriptors to preserve the ability of retrieving stdout and
+          strerr of current command and at the same time allowing to pipe
+          stdout (which isn't possible in plain Shell Scripting).
 
         Parameters:
             command (str | Iterable[str]): shell command that needs to be
                 executed.
-            stdin (str | int): stdin file descriptor or input text for command.
+            input_text (str | None): input text for command. Default is None.
+            stdin (str | int): stdin file descriptor or piped text for command.
                 Default is "parent fd" aka self.stdout (to gain ability of
                 chaining shell commands aka piping).
             stdout (int): stdout file descriptor. Default is PIPE.
@@ -359,8 +379,10 @@ class Shell:
             Shell: class instance that can be chained.
         """
         if stdin == "parent fd":
-            stdin = self.stdout
-        shell = Shell(command, stdin, stdout, stderr)
+            stdin = self.__create_stdout_fd(self.__output)
+        elif isinstance(stdin, str):
+            stdin = self.__create_stdout_fd(stdin)
+        shell = Shell(command, input_text, stdin, stdout, stderr)
         return shell
 
     def terminate(self):

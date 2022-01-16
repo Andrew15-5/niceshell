@@ -21,7 +21,8 @@ def quotes_wrapper(path: Union[str, Iterable[str]]) -> str: ...
 
 
 def shell(command: Union[str, Iterable[str]],
-          stdin: int = PIPE,
+          input_text: Union[str, None] = None,
+          stdin: Union[str, int] = PIPE,
           stdout: int = PIPE,
           stderr: int = PIPE) -> Shell: ...
 
@@ -38,6 +39,7 @@ class Shell:
 
     def __init__(self,
                  command: Union[str, Iterable[str]],
+                 input_text: Union[str, None] = None,
                  stdin: Union[str, int] = PIPE,
                  stdout: int = PIPE,
                  stderr: int = PIPE) -> None: ...
@@ -60,7 +62,8 @@ class Shell:
 
     def shell(self,
               command: Union[str, Iterable[str]],
-              stdin: int = "parent fd",
+              input_text: Union[str, None] = None,
+              stdin: Union[str, int] = "parent fd",
               stdout: int = PIPE,
               stderr: int = PIPE) -> Shell: ...
 

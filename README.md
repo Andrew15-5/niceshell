@@ -88,6 +88,7 @@ provides for better understanding of what you are looking for.
 
 ## TODO
 
+* [x] Add ability to get command's output and pipe it to another command
 * [x] Add function that check if sudo can be used without password
 * [x] Add ability to provide input to command in core.Shell
 * [x] Add cd
@@ -97,4 +98,3 @@ provides for better understanding of what you are looking for.
 * [x] Add shell() function for chain to start from small 's'
 * [x] Add remaining Popen methods/properties to Shell class
 * [x] Add ln
-* [x] Add ls
