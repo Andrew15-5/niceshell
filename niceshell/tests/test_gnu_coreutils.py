@@ -5,7 +5,7 @@ from typing import Iterable, Union
 import pytest
 
 sys.path.extend([f"{sys.path[0]}/..", f"{sys.path[0]}/../.."])
-from shell import gnu_coreutils
+from niceshell import gnu_coreutils
 
 
 class TestGNUcoreutils:

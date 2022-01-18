@@ -1,4 +1,4 @@
-# shell - Python 3 module for better shell coding
+# niceshell - Python 3 module for better shell coding
 
 ## Requirements
 
@@ -9,8 +9,8 @@
 
 ```bash
 python3 -m pip install --user -U regex pytest # pytest is to run tests
-git clone https://github.com/Andrew15-5/python-shell-module.git
-cd python-shell-module
+git clone https://github.com/Andrew15-5/niceshell.git
+cd niceshell
 # Copy the module in ~/.local/lib/${current_python3_version}/site-packages/
 ./copy_lib.sh
 # Or you can create a symlink instead
@@ -20,7 +20,7 @@ cd python-shell-module
 ## Usage
 
 ```python
-from shell import *
+from niceshell import *
 ext = "py"
 
 process1 = ls(f"*.{ext}", batch=True)
@@ -51,7 +51,7 @@ Therefore, I encourage everyone to test result of each function, method,
 variable, constant, etc. to be 100% sure of how your
 script/program/app will handle every situation.
 
-There are some tests in "tests" directory (./shell/tests/) to get you
+There are some tests in "tests" directory (./niceshell/tests/) to get you
 started. And of course you can see implementation of whatever the module
 provides for better understanding of what you are looking for.
 

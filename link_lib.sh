@@ -1,5 +1,5 @@
 #!/bin/bash
-lib=shell
+lib=niceshell
 libs_dir=$PWD
 current_python=$(basename $(realpath $(which python3)))
 destination_dir=~/".local/lib/${current_python}/site-packages"

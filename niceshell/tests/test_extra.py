@@ -4,7 +4,7 @@ import sys
 import pytest
 
 sys.path.extend([f"{sys.path[0]}/..", f"{sys.path[0]}/../.."])
-from shell import extra
+from niceshell import extra
 
 
 class TestExtra:
