@@ -1,9 +1,8 @@
 # shell - Python 3 module for better shell coding
 
-## Before using it you'll need
+## Requirements
 
-* Python 3.5+ (tested on 3.8.10)
-* Pip (to install modules-dependencies)
+* Python 3.6+ (tested on 3.6.0)
 * Bash (to run link_lib.sh)
 
 ## Installation
@@ -86,8 +85,9 @@ provides for better understanding of what you are looking for.
   * mv()
   * rm()
 
-## TODO
+## TODO list
 
+* [ ] Add ability to install module with pip
 * [x] Add ability to get command's output and pipe it to another command
 * [x] Add function that check if sudo can be used without password
 * [x] Add ability to provide input to command in core.Shell
@@ -97,4 +97,3 @@ provides for better understanding of what you are looking for.
 * [x] Add cp
 * [x] Add shell() function for chain to start from small 's'
 * [x] Add remaining Popen methods/properties to Shell class
-* [x] Add ln
