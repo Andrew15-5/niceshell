@@ -3,18 +3,22 @@
 ## Requirements
 
 * Python 3.6+ (tested on 3.6.0)
-* Bash (to run link_lib.sh)
 
 ## Installation
 
+### Automatic installation
+
 ```bash
-python3 -m pip install --user -U regex pytest # pytest is to run tests
-git clone https://github.com/Andrew15-5/niceshell.git
-cd niceshell
-# Copy the module in ~/.local/lib/${current_python3_version}/site-packages/
-./copy_lib.sh
-# Or you can create a symlink instead
-./link_lib.sh
+python3 -m pip install niceshell
+```
+
+### Manual installation
+
+```bash
+cd /tmp/
+version=1.0.0 # Choose desired version
+wget -c "https://github.com/Andrew15-5/niceshell/releases/download/v${version}/niceshell-${version}-py3-none-any.whl"
+python3 -m pip -U --user install niceshell-${version}-py3-none-any.whl
 ```
 
 ## Usage
@@ -87,7 +91,7 @@ provides for better understanding of what you are looking for.
 
 ## TODO list
 
-* [ ] Add ability to install module with pip
+* [x] Add ability to install module via pip
 * [x] Add ability to get command's output and pipe it to another command
 * [x] Add function that check if sudo can be used without password
 * [x] Add ability to provide input to command in core.Shell
