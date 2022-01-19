@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 from inspect import cleandoc
 from os import close, pipe, write
 from subprocess import PIPE, Popen

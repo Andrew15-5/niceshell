@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 from .core import (
     expose_tilde,
     normalize_short_and_long_args,
@@ -21,7 +20,7 @@ __all__ = ["cd", "cp", "expose_tilde", "force_sudo_password_promt",
            "normalize_short_and_long_args", "quotes_wrapper", "rm", "shell",
            "Shell", "ShortArgsOption", "UID", "USER"]
 __author__ = "Andrew Voynov"
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 GID = Shell("id -g").output()[:-1]
 GROUP = Shell("id -gn").output()[:-1]

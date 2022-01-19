@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 from typing import Iterable, Union
 from os import chdir
 import regex as re

@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 from .core import shell
 
 __all__ = ["force_sudo_password_promt", "get_root_privileges",
