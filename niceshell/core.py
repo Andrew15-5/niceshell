@@ -378,7 +378,7 @@ class Shell:
             Shell: class instance that can be chained.
         """
         if stdin == "parent fd":
-            stdin = self.__create_stdout_fd(self.__output)
+            stdin = self.__create_stdout_fd(self.output())
         elif isinstance(stdin, str):
             stdin = self.__create_stdout_fd(stdin)
         shell = Shell(command, input_text, stdin, stdout, stderr)
