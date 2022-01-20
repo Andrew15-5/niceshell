@@ -16,7 +16,7 @@ python3 -m pip install niceshell
 
 ```bash
 cd /tmp/
-version=1.0.3 # Choose desired version
+version=1.1.0 # Choose desired version
 wget -c "https://github.com/Andrew15-5/niceshell/releases/download/v${version}/niceshell-${version}-py3-none-any.whl"
 python3 -m pip -U --user install niceshell-${version}-py3-none-any.whl
 ```
@@ -81,6 +81,8 @@ provides for better understanding of what you are looking for.
   * get_root_privileges()
   * get_root_privileges_or_exit()
   * has_root_privileges()
+  * list_dirs()
+  * list_files()
 * gnu_coreutils
   * cd()
   * cp()
@@ -91,6 +93,7 @@ provides for better understanding of what you are looking for.
 
 ## TODO list
 
+* [x] Add functions to get dirs and files from path
 * [x] Add ability to install module via pip
 * [x] Add ability to get command's output and pipe it to another command
 * [x] Add function that check if sudo can be used without password
@@ -100,4 +103,3 @@ provides for better understanding of what you are looking for.
 * [x] Add rm
 * [x] Add cp
 * [x] Add shell() function for chain to start from small 's'
-* [x] Add remaining Popen methods/properties to Shell class
