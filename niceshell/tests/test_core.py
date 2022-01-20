@@ -13,7 +13,7 @@ class TestCore:
         quotes_wrapper = core.quotes_wrapper
 
         # Errors
-        # quoted_path must be str
+        # quoted_path must be str.
         with pytest.raises(TypeError):
             expose_tilde(1)
         with pytest.raises(TypeError):
@@ -44,13 +44,13 @@ class TestCore:
         with pytest.raises(TypeError):
             normalize('', [1])
 
-        # No spaces are allowed in short args which are TOGETHER
+        # No spaces are allowed in short args which are TOGETHER.
         with pytest.raises(ValueError):
             normalize(' ')
         with pytest.raises(ValueError):
             normalize("-a -b")
 
-        # (Iterable[str]) Short args which are TOGETHER must be 1 char. long
+        # (Iterable[str]) Short args which are TOGETHER must be 1 char. long.
         with pytest.raises(ValueError):
             normalize(["ab"], [])
         with pytest.raises(ValueError):
@@ -60,6 +60,7 @@ class TestCore:
         with pytest.raises(ValueError):
             normalize([], [], True)
 
+        # Asserts
         # No args
         assert normalize() == ''
 
@@ -157,7 +158,7 @@ class TestCore:
         with pytest.raises(TypeError):
             wrapper([1])
 
-        # Quotes
+        # Asserts
         assert wrapper('') == '""'
         assert wrapper(' ') == '" "'
         assert wrapper(set(' ')) == '" "'

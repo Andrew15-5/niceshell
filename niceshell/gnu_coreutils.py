@@ -35,7 +35,7 @@ def cd(path: str = '',
     if path:
         path = expose_tilde(quotes_wrapper(path))
         path = re.sub(r'(?<=[^\\])\*', '"*"', path)  # Expose wildcard (*)
-        path = re.sub(r'\\{1}\*', '*', path)  # Preserve '*'
+        path = re.sub(r'\\\*', '*', path)  # Preserve '*'
     args = normalize_short_and_long_args(
         short_args, [], ShortArgsOption.APART)
     command = f"cd {args} -- {path}".strip()

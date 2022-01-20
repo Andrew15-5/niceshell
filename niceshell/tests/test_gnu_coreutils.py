@@ -57,7 +57,8 @@ class TestGNUcoreutils:
         with pytest.raises(TypeError):
             cp('', 1)
 
-        # Asserts batch=False
+        # Asserts
+        # batch=False
         def cp(source_path: Union[str, Iterable[str]],
                destination_path: str,
                sudo=False,
@@ -89,7 +90,7 @@ class TestGNUcoreutils:
             short_args=['r', 'f', 'b', "S .bak"], long_args=["verbose"]
         ) == 'sudo cp -r -f -b -S .bak --verbose -- "tmp/dir1" "dir2" ~/"d i r 3/src/" ~'
 
-        # Asserts batch=True
+        # batch=True
         def cp(source_path: Union[str, Iterable[str]],
                destination_path: str,
                sudo=False,
@@ -141,7 +142,8 @@ class TestGNUcoreutils:
         with pytest.raises(TypeError):
             ln('', 1)
 
-        # Asserts batch=False
+        # Asserts
+        # batch=False
         def ln(source_path: Union[str, Iterable[str]],
                destination_path: str,
                sudo=False,
@@ -173,7 +175,7 @@ class TestGNUcoreutils:
             short_args=['r', 's', 'f', "S .bak"], long_args=["verbose"]
         ) == 'sudo ln -r -s -f -S .bak --verbose -- "tmp/dir1" "dir2" ~/"d i r 3/src/" ~'
 
-        # Asserts batch=True
+        # batch=True
         def ln(source_path: Union[str, Iterable[str]],
                destination_path: str,
                sudo=False,
@@ -219,7 +221,8 @@ class TestGNUcoreutils:
         with pytest.raises(TypeError):
             ls([1], test=True)
 
-        # Asserts batch=False
+        # Asserts
+        # batch=False
         def ls(path: Union[str, Iterable[str]] = '',
                sudo=False,
                short_args: Union[str, Iterable[str]] = [],
@@ -251,7 +254,7 @@ class TestGNUcoreutils:
             short_args=['l', 'd', "-I PATTERN"], long_args=["all"]
         ) == 'sudo ls -l -d -I PATTERN --all -- ~/"here/*" ~/"there/*"'
 
-        # Asserts batch=True
+        # batch=True
         def ls(path: Union[str, Iterable[str]] = '',
                sudo=False,
                short_args: Union[str, Iterable[str]] = [],
@@ -305,7 +308,8 @@ class TestGNUcoreutils:
         with pytest.raises(TypeError):
             mv('', 1)
 
-        # Asserts batch=False
+        # Asserts
+        # batch=False
         def mv(source_path: Union[str, Iterable[str]],
                destination_path: str,
                sudo=False,
@@ -336,7 +340,7 @@ class TestGNUcoreutils:
             short_args=['f', 'b', "S .bak"], long_args=["verbose"]
         ) == 'sudo mv -f -b -S .bak --verbose -- "tmp/dir1" "dir2" ~/"d i r 3/src/" ~'
 
-        # Asserts batch=True
+        # batch=True
         def mv(source_path: Union[str, Iterable[str]],
                destination_path: str,
                sudo=False,
@@ -384,7 +388,8 @@ class TestGNUcoreutils:
         with pytest.raises(TypeError):
             rm([1])
 
-        # Asserts batch=False
+        # Asserts
+        # batch=False
         def rm(path: Union[str, Iterable[str]],
                sudo=False,
                short_args: Union[str, Iterable[str]] = [],
@@ -413,7 +418,7 @@ class TestGNUcoreutils:
             short_args=['r', 'f', "I"], long_args=["verbose"]
         ) == 'sudo rm -r -f -I --verbose -- "tmp/dir1" "dir2" ~/"d i r 3/src/"'
 
-        # Asserts batch=True
+        # batch=True
         def rm(path: Union[str, Iterable[str]],
                sudo=False,
                short_args: Union[str, Iterable[str]] = [],

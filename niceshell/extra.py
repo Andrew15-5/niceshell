@@ -12,7 +12,7 @@ def force_sudo_password_promt():
 def get_root_privileges():
     """
     Shows sudo password prompt. Returns True if correct password has been
-    entered, otherwise returns False (e.g. Ctrl+C was pressed).
+    entered, otherwise returns False (e.g., Ctrl+C was pressed).
     """
     return not shell("sudo true").exit_code()
 
