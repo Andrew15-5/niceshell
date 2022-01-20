@@ -1,5 +1,6 @@
-from typing import Iterable, Union
 from os import chdir
+from typing import Iterable, Union
+
 import regex as re
 
 from .core import *
