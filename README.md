@@ -16,7 +16,7 @@ python3 -m pip install niceshell
 
 ```bash
 cd /tmp/
-version=1.3.0 # Choose desired version
+version=1.3.1 # Choose desired version
 wget -c "https://github.com/Andrew15-5/niceshell/releases/download/v${version}/niceshell-${version}-py3-none-any.whl"
 python3 -m pip -U --user install niceshell-${version}-py3-none-any.whl
 ```

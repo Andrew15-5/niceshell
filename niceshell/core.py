@@ -283,7 +283,7 @@ class Shell:
             exclude_last_lf (bool): remove last blank line in list. Default is
                 True.
             stderr (bool): grab output of stdout or stderr. Default is False
-                (grap output of stdout).
+                (grab output of stdout).
 
         Returns:
             List[str]: output splitted by lines.
