@@ -19,12 +19,12 @@ class TestGNUcoreutils:
 
         # Asserts
         def cd(path: str = '',
-                short_args: Union[str, Iterable[str]] = []):
+               short_args: Union[str, Iterable[str]] = []):
             return gnu_coreutils.cd(path, short_args, True)
         # Test short arguments
-        assert cd(short_args="-L") == "cd -L --"
-        assert cd(short_args="Pe") == "cd -P -e --"
-        assert cd(short_args=['P', 'e', '@']) == "cd -P -e -@ --"
+        assert cd('', "-L") == "cd -L --"
+        assert cd('', "Pe") == "cd -P -e --"
+        assert cd('', ['P', 'e', '@']) == "cd -P -e -@ --"
 
         # Without wildcard
         assert cd() == "cd  --"
