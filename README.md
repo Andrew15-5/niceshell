@@ -16,7 +16,7 @@ python3 -m pip install niceshell
 
 ```bash
 cd /tmp/
-version=1.2.0 # Choose desired version
+version=1.3.0 # Choose desired version
 wget -c "https://github.com/Andrew15-5/niceshell/releases/download/v${version}/niceshell-${version}-py3-none-any.whl"
 python3 -m pip -U --user install niceshell-${version}-py3-none-any.whl
 ```
@@ -89,10 +89,12 @@ provides for better understanding of what you are looking for.
   * ln()
   * ls()
   * mv()
+  * pwd()
   * rm()
 
 ## TODO list
 
+* [x] Add pwd
 * [x] Add functions to get dirs and files from path
 * [x] Add ability to install module via pip
 * [x] Add ability to get command's output and pipe it to another command
@@ -102,4 +104,3 @@ provides for better understanding of what you are looking for.
 * [x] Add mv
 * [x] Add rm
 * [x] Add cp
-* [x] Add shell() function for chain to start from small 's'

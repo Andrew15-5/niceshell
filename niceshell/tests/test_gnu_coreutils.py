@@ -5,6 +5,7 @@ from typing import Iterable, Union
 import pytest
 
 sys.path.extend([f"{sys.path[0]}/..", f"{sys.path[0]}/../.."])
+from niceshell import core
 from niceshell import gnu_coreutils
 
 
@@ -376,6 +377,12 @@ class TestGNUcoreutils:
         # Case #2
         assert mv(['"/dir 1" dir2/*'], '~', short_args='i'
                   ) == 'mv -i -- "/dir 1" dir2/* ~'
+
+    def test_pwd(self):
+        pwd = gnu_coreutils.pwd
+        # Asserts
+        assert type(pwd()) == str
+        assert type(pwd('L')) == core.Shell
 
     def test_rm(self):
         rm = gnu_coreutils.rm

@@ -14,15 +14,16 @@ from .extra import (
     list_dirs,
     list_files
 )
-from .gnu_coreutils import cd, cp, ln, ls, mv, rm
+from .gnu_coreutils import cd, cp, ln, ls, mv, pwd, rm
 
 __all__ = ["cd", "cp", "expose_tilde", "force_sudo_password_promt",
            "get_root_privileges", "get_root_privileges_or_exit", "GID",
            "GROUP", "has_root_privileges", "HOME", "list_dirs", "list_files",
-           "ln", "ls", "mv", "normalize_short_and_long_args", "quotes_wrapper",
-           "rm", "shell", "Shell", "ShortArgsOption", "UID", "USER"]
+           "ln", "ls", "mv", "normalize_short_and_long_args", "pwd",
+           "quotes_wrapper", "rm", "shell", "Shell", "ShortArgsOption", "UID",
+           "USER"]
 __author__ = "Andrew Voynov"
-__version__ = "1.2.0"
+__version__ = "1.3.0"
 
 GID = Shell("id -g").output()[:-1]
 GROUP = Shell("id -gn").output()[:-1]
