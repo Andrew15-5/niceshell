@@ -62,59 +62,58 @@ class TestGNUcoreutils:
         # batch=False
         def cp(source_path: Union[str, Iterable[str]],
                destination_path: str,
-               sudo=False,
                short_args: Union[str, Iterable[str]] = [],
-               long_args: Iterable[str] = []) -> str:
-            return gnu_coreutils.cp(source_path, destination_path, False,
-                                    sudo, short_args, long_args, True)
+               long_args: Iterable[str] = [],
+               sudo=False) -> str:
+            return gnu_coreutils.cp(source_path, destination_path, short_args,
+                                    long_args, False, sudo, True)
         # Test simple (edge) cases
         assert cp('', '') == 'cp  -- "" ""'
         assert cp([''], '') == 'cp  -- "" ""'
         assert cp(('', ''), '') == 'cp  -- "" "" ""'
         assert cp("file", "/tmp") == 'cp  -- "file" "/tmp"'
         # Test short/long arguments
-        assert cp('', '', short_args="-r") == 'cp -r -- "" ""'
-        assert cp('', '', long_args=["--update"]) == 'cp --update -- "" ""'
-        assert cp('', '', short_args="rf", long_args=["update"]
+        assert cp('', '', "-r") == 'cp -r -- "" ""'
+        assert cp('', '', [], ["--update"]) == 'cp --update -- "" ""'
+        assert cp('', '', "rf", ["update"]
                   ) == 'cp -r -f --update -- "" ""'
-        assert cp('', '', short_args=["r", "S .bak"], long_args=["update"]
+        assert cp('', '', ["r", "S .bak"], ["update"]
                   ) == 'cp -r -S .bak --update -- "" ""'
         # Test everything
         assert cp(
-            "/folder with spaces/dir", "/different folder with spaces",
-            short_args='r'
+            "/folder with spaces/dir", "/different folder with spaces", 'r'
         ) == 'cp -r -- "/folder with spaces/dir" "/different folder with spaces"'
         assert cp(["../../tmp/file1", "file2", "f i l e 3"], "~/"
                   ) == 'cp  -- "../../tmp/file1" "file2" "f i l e 3" ~/""'
         assert cp(
-            ["tmp/dir1", "dir2", "~/d i r 3/src/"], "~", sudo=True,
-            short_args=['r', 'f', 'b', "S .bak"], long_args=["verbose"]
+            ["tmp/dir1", "dir2", "~/d i r 3/src/"], "~",
+            ['r', 'f', 'b', "S .bak"], ["verbose"], True
         ) == 'sudo cp -r -f -b -S .bak --verbose -- "tmp/dir1" "dir2" ~/"d i r 3/src/" ~'
 
         # batch=True
         def cp(source_path: Union[str, Iterable[str]],
                destination_path: str,
-               sudo=False,
                short_args: Union[str, Iterable[str]] = [],
-               long_args: Iterable[str] = []) -> str:
-            return gnu_coreutils.cp(source_path, destination_path, True,
-                                    sudo, short_args, long_args, True)
+               long_args: Iterable[str] = [],
+               sudo=False) -> str:
+            return gnu_coreutils.cp(source_path, destination_path, short_args,
+                                    long_args, True, sudo, True)
         # Test simple/edge cases
         assert cp('', '') == 'cp  --  ""'
         assert cp([''], '') == 'cp  --  ""'
         assert cp(('', ''), '') == 'cp  --   ""'
         assert cp("/file", "/tmp") == 'cp  -- /file "/tmp"'
         # Test short/long arguments
-        assert cp('', '', short_args="-r") == 'cp -r --  ""'
-        assert cp('', '', long_args=["--update"]) == 'cp --update --  ""'
-        assert cp('', '', short_args="rf", long_args=["update"]
+        assert cp('', '', "-r") == 'cp -r --  ""'
+        assert cp('', '', [], ["--update"]) == 'cp --update --  ""'
+        assert cp('', '', "rf", ["update"]
                   ) == 'cp -r -f --update --  ""'
-        assert cp('', '', short_args=["r", "S .bak"], long_args=["update"]
+        assert cp('', '', ["r", "S .bak"], ["update"]
                   ) == 'cp -r -S .bak --update --  ""'
         # Test everything
         assert cp(
-            ["tmp/dir1", "dir2", "~/dir3/src/*"], "~", sudo=True,
-            short_args=['r', 'f', 'b', "S .bak"], long_args=["verbose"]
+            ["tmp/dir1", "dir2", "~/dir3/src/*"], "~",
+            ['r', 'f', 'b', "S .bak"], ["verbose"], True
         ) == 'sudo cp -r -f -b -S .bak --verbose -- tmp/dir1 dir2 ~/dir3/src/* ~'
 
         # Special cases (hacks)
@@ -125,7 +124,7 @@ class TestGNUcoreutils:
                   ) == 'cp  -- file1 file2 ~/"dest"'
 
         # Case #2
-        assert cp(['"/dir 1" dir2/*'], '~', short_args='r'
+        assert cp(['"/dir 1" dir2/*'], '~', 'r'
                   ) == 'cp -r -- "/dir 1" dir2/* ~'
 
     def test_ln(self):
@@ -147,59 +146,59 @@ class TestGNUcoreutils:
         # batch=False
         def ln(source_path: Union[str, Iterable[str]],
                destination_path: str,
-               sudo=False,
                short_args: Union[str, Iterable[str]] = [],
-               long_args: Iterable[str] = []) -> str:
-            return gnu_coreutils.ln(source_path, destination_path, False,
-                                    sudo, short_args, long_args, True)
+               long_args: Iterable[str] = [],
+               sudo=False) -> str:
+            return gnu_coreutils.ln(source_path, destination_path, short_args,
+                                    long_args, False, sudo, True)
         # Test simple (edge) cases
         assert ln('', '') == 'ln  -- "" ""'
         assert ln([''], '') == 'ln  -- "" ""'
         assert ln(('', ''), '') == 'ln  -- "" "" ""'
         assert ln("/file", "/tmp") == 'ln  -- "/file" "/tmp"'
         # Test short/long arguments
-        assert ln('', '', short_args="-s") == 'ln -s -- "" ""'
-        assert ln('', '', long_args=["--force"]) == 'ln --force -- "" ""'
-        assert ln('', '', short_args="rs", long_args=["force"]
+        assert ln('', '', "-s") == 'ln -s -- "" ""'
+        assert ln('', '', [], ["--force"]) == 'ln --force -- "" ""'
+        assert ln('', '', "rs", ["force"]
                   ) == 'ln -r -s --force -- "" ""'
-        assert ln('', '', short_args=["r", "S .bak"], long_args=["all"]
+        assert ln('', '', ["r", "S .bak"], ["all"]
                   ) == 'ln -r -S .bak --all -- "" ""'
         # Test everything
         assert ln(
             "/folder with spaces/dir", "/different folder with spaces",
-            short_args='s'
+            's'
         ) == 'ln -s -- "/folder with spaces/dir" "/different folder with spaces"'
         assert ln(["../../tmp/file1", "file2", "f i l e 3"], "~/"
                   ) == 'ln  -- "../../tmp/file1" "file2" "f i l e 3" ~/""'
         assert ln(
-            ["tmp/dir1", "dir2", "~/d i r 3/src/"], "~", sudo=True,
-            short_args=['r', 's', 'f', "S .bak"], long_args=["verbose"]
+            ["tmp/dir1", "dir2", "~/d i r 3/src/"], "~",
+            ['r', 's', 'f', "S .bak"], ["verbose"], True
         ) == 'sudo ln -r -s -f -S .bak --verbose -- "tmp/dir1" "dir2" ~/"d i r 3/src/" ~'
 
         # batch=True
         def ln(source_path: Union[str, Iterable[str]],
                destination_path: str,
-               sudo=False,
                short_args: Union[str, Iterable[str]] = [],
-               long_args: Iterable[str] = []) -> str:
-            return gnu_coreutils.ln(source_path, destination_path, True,
-                                    sudo, short_args, long_args, True)
+               long_args: Iterable[str] = [],
+               sudo=False) -> str:
+            return gnu_coreutils.ln(source_path, destination_path, short_args,
+                                    long_args, True, sudo, True)
         # Test simple/edge cases
         assert ln('', '') == 'ln  --  ""'
         assert ln([''], '') == 'ln  --  ""'
         assert ln(('', ''), '') == 'ln  --   ""'
         assert ln("/file", "/tmp") == 'ln  -- /file "/tmp"'
         # Test short/long arguments
-        assert ln('', '', short_args="-s") == 'ln -s --  ""'
-        assert ln('', '', long_args=["--force"]) == 'ln --force --  ""'
-        assert ln('', '', short_args="rs", long_args=["force"]
+        assert ln('', '', "-s") == 'ln -s --  ""'
+        assert ln('', '', [], ["--force"]) == 'ln --force --  ""'
+        assert ln('', '', "rs", ["force"]
                   ) == 'ln -r -s --force --  ""'
-        assert ln('', '', short_args=["r", "S .bak"], long_args=["all"]
+        assert ln('', '', ["r", "S .bak"], ["all"]
                   ) == 'ln -r -S .bak --all --  ""'
         # Test everything
         assert ln(
-            ["tmp/dir1", "dir2", "~/dir3/src/*"], "~", sudo=True,
-            short_args=['r', 's', 'f', "S .bak"], long_args=["verbose"]
+            ["tmp/dir1", "dir2", "~/dir3/src/*"], "~",
+            ['r', 's', 'f', "S .bak"], ["verbose"], True
         ) == 'sudo ln -r -s -f -S .bak --verbose -- tmp/dir1 dir2 ~/dir3/src/* ~'
 
         # Special cases (hacks)
@@ -210,7 +209,7 @@ class TestGNUcoreutils:
                   ) == 'ln  -- file1 file2 ~/"dest"'
 
         # Case #2
-        assert ln(['"/dir 1" dir2/*'], '~', short_args='s'
+        assert ln(['"/dir 1" dir2/*'], '~', 's'
                   ) == 'ln -s -- "/dir 1" dir2/* ~'
 
     def test_ls(self):
@@ -225,11 +224,11 @@ class TestGNUcoreutils:
         # Asserts
         # batch=False
         def ls(path: Union[str, Iterable[str]] = '',
-               sudo=False,
                short_args: Union[str, Iterable[str]] = [],
-               long_args: Iterable[str] = []) -> str:
+               long_args: Iterable[str] = [],
+               sudo=False) -> str:
             return gnu_coreutils.ls(
-                path, False, sudo, short_args, long_args, True)
+                path, short_args, long_args, False, sudo, True)
         # Test simple/edge cases
         assert ls() == "ls  --"
         assert ls(()) == "ls  --"
@@ -241,27 +240,25 @@ class TestGNUcoreutils:
         assert ls(["dir1", "dir2", "d i r 3"]
                   ) == 'ls  -- "dir1" "dir2" "d i r 3"'
         # Test short/long arguments
-        assert ls(short_args="a"
-                  ) == "ls -a --"
-        assert ls(long_args=["--all"]
-                  ) == "ls --all --"
-        assert ls(short_args="ld", long_args=["all"]
+        assert ls('', "a") == "ls -a --"
+        assert ls('', [], ["--all"]) == "ls --all --"
+        assert ls('', "ld", ["all"]
                   ) == "ls -l -d --all --"
-        assert ls(short_args=["-l", "-d"], long_args=["all"]
+        assert ls('', ["-l", "-d"], ["all"]
                   ) == "ls -l -d --all --"
         # Test everything
         assert ls(
-            ["~/here/*", "~/there/*"], sudo=True,
-            short_args=['l', 'd', "-I PATTERN"], long_args=["all"]
+            ["~/here/*", "~/there/*"],
+            ['l', 'd', "-I PATTERN"], ["all"], True
         ) == 'sudo ls -l -d -I PATTERN --all -- ~/"here/*" ~/"there/*"'
 
         # batch=True
         def ls(path: Union[str, Iterable[str]] = '',
-               sudo=False,
                short_args: Union[str, Iterable[str]] = [],
-               long_args: Iterable[str] = []) -> str:
+               long_args: Iterable[str] = [],
+               sudo=False) -> str:
             return gnu_coreutils.ls(
-                path, True, sudo, short_args, long_args, True)
+                path, short_args, long_args, True, sudo, True)
         # Test simple/edge cases
         assert ls() == "ls  --"
         assert ls(()) == "ls  --"
@@ -272,15 +269,15 @@ class TestGNUcoreutils:
         assert ls(["dir1", "dir2", "dir3"]
                   ) == "ls  -- dir1 dir2 dir3"
         # Test short/long arguments
-        assert ls(short_args="-a") == "ls -a --"
-        assert ls(long_args=["--all"]) == "ls --all --"
-        assert ls(short_args="ld", long_args=["all"]
+        assert ls('', "-a") == "ls -a --"
+        assert ls('', [], ["--all"]) == "ls --all --"
+        assert ls('', "ld", ["all"]
                   ) == "ls -l -d --all --"
-        assert ls(short_args=["l", "d"], long_args=["all"]
+        assert ls('', ["l", "d"], ["all"]
                   ) == "ls -l -d --all --"
         # Test everything
-        assert ls(["here/*", "there/*"], sudo=True,
-                  short_args=['l', 'd', "I PATTERN"], long_args=["all"]
+        assert ls(["here/*", "there/*"],
+                  ['l', 'd', "I PATTERN"], ["all"], True
                   ) == "sudo ls -l -d -I PATTERN --all -- here/* there/*"
 
         # Special cases (hacks)
@@ -313,22 +310,22 @@ class TestGNUcoreutils:
         # batch=False
         def mv(source_path: Union[str, Iterable[str]],
                destination_path: str,
-               sudo=False,
                short_args: Union[str, Iterable[str]] = [],
-               long_args: Iterable[str] = []) -> str:
-            return gnu_coreutils.mv(source_path, destination_path, False,
-                                    sudo, short_args, long_args, True)
+               long_args: Iterable[str] = [],
+               sudo=False) -> str:
+            return gnu_coreutils.mv(source_path, destination_path, short_args,
+                                    long_args, False, sudo, True)
         # Test simple (edge) cases
         assert mv('', '') == 'mv  -- "" ""'
         assert mv([''], '') == 'mv  -- "" ""'
         assert mv(('', ''), '') == 'mv  -- "" "" ""'
         assert mv("file", "/tmp") == 'mv  -- "file" "/tmp"'
         # Test short/long arguments
-        assert mv('', '', short_args="-n") == 'mv -n -- "" ""'
-        assert mv('', '', long_args=["--update"]) == 'mv --update -- "" ""'
-        assert mv('', '', short_args="bf", long_args=["update"]
+        assert mv('', '', "-n") == 'mv -n -- "" ""'
+        assert mv('', '', [], ["--update"]) == 'mv --update -- "" ""'
+        assert mv('', '', "bf", ["update"]
                   ) == 'mv -b -f --update -- "" ""'
-        assert mv('', '', short_args=["b", "S .bak"], long_args=["update"]
+        assert mv('', '', ["b", "S .bak"], ["update"]
                   ) == 'mv -b -S .bak --update -- "" ""'
         # Test everything
         assert mv(
@@ -337,34 +334,34 @@ class TestGNUcoreutils:
         assert mv(["../../tmp/file1", "file2", "f i l e 3"], "~/"
                   ) == 'mv  -- "../../tmp/file1" "file2" "f i l e 3" ~/""'
         assert mv(
-            ["tmp/dir1", "dir2", "~/d i r 3/src/"], "~", sudo=True,
-            short_args=['f', 'b', "S .bak"], long_args=["verbose"]
+            ["tmp/dir1", "dir2", "~/d i r 3/src/"], "~",
+            ['f', 'b', "S .bak"], ["verbose"], True
         ) == 'sudo mv -f -b -S .bak --verbose -- "tmp/dir1" "dir2" ~/"d i r 3/src/" ~'
 
         # batch=True
         def mv(source_path: Union[str, Iterable[str]],
                destination_path: str,
-               sudo=False,
                short_args: Union[str, Iterable[str]] = [],
-               long_args: Iterable[str] = []) -> str:
-            return gnu_coreutils.mv(source_path, destination_path, True,
-                                    sudo, short_args, long_args, True)
+               long_args: Iterable[str] = [],
+               sudo=False) -> str:
+            return gnu_coreutils.mv(source_path, destination_path, short_args,
+                                    long_args, True, sudo, True)
         # Test simple/edge cases
         assert mv('', '') == 'mv  --  ""'
         assert mv([''], '') == 'mv  --  ""'
         assert mv(('', ''), '') == 'mv  --   ""'
         assert mv("/file", "/tmp") == 'mv  -- /file "/tmp"'
         # Test short/long arguments
-        assert mv('', '', short_args="-n") == 'mv -n --  ""'
-        assert mv('', '', long_args=["--update"]) == 'mv --update --  ""'
-        assert mv('', '', short_args="bf", long_args=["update"]
+        assert mv('', '', "-n") == 'mv -n --  ""'
+        assert mv('', '', [], ["--update"]) == 'mv --update --  ""'
+        assert mv('', '', "bf", ["update"]
                   ) == 'mv -b -f --update --  ""'
-        assert mv('', '', short_args=["b", "S .bak"], long_args=["update"]
+        assert mv('', '', ["b", "S .bak"], ["update"]
                   ) == 'mv -b -S .bak --update --  ""'
         # Test everything
         assert mv(
-            ["tmp/dir1", "dir2", "~/dir3/src/*"], "~", sudo=True,
-            short_args=['f', 'b', "S .bak"], long_args=["verbose"]
+            ["tmp/dir1", "dir2", "~/dir3/src/*"], "~",
+            ['f', 'b', "S .bak"], ["verbose"], True
         ) == 'sudo mv -f -b -S .bak --verbose -- tmp/dir1 dir2 ~/dir3/src/* ~'
 
         # Special cases (hacks)
@@ -375,7 +372,7 @@ class TestGNUcoreutils:
                   ) == 'mv  -- file1 file2 ~/"dest"'
 
         # Case #2
-        assert mv(['"/dir 1" dir2/*'], '~', short_args='i'
+        assert mv(['"/dir 1" dir2/*'], '~', 'i'
                   ) == 'mv -i -- "/dir 1" dir2/* ~'
 
     def test_pwd(self):
@@ -398,56 +395,56 @@ class TestGNUcoreutils:
         # Asserts
         # batch=False
         def rm(path: Union[str, Iterable[str]],
-               sudo=False,
                short_args: Union[str, Iterable[str]] = [],
-               long_args: Iterable[str] = []) -> str:
+               long_args: Iterable[str] = [],
+               sudo=False) -> str:
             return gnu_coreutils.rm(
-                path, False, sudo, short_args, long_args, True)
+                path, short_args, long_args, False, sudo, True)
         # Test simple (edge) cases
         assert rm('') == 'rm  -- ""'
         assert rm(['']) == 'rm  -- ""'
         assert rm(('')) == 'rm  -- ""'
         assert rm("file") == 'rm  -- "file"'
         # Test short/long arguments
-        assert rm('', short_args="-r") == 'rm -r -- ""'
-        assert rm('', long_args=["--force"]) == 'rm --force -- ""'
-        assert rm('', short_args="rI", long_args=["force"]
+        assert rm('', "-r") == 'rm -r -- ""'
+        assert rm('', [], ["--force"]) == 'rm --force -- ""'
+        assert rm('', "rI", ["force"]
                   ) == 'rm -r -I --force -- ""'
-        assert rm('', short_args=["r", "I"], long_args=["force"]
+        assert rm('', ["r", "I"], ["force"]
                   ) == 'rm -r -I --force -- ""'
         # Test everything
-        assert rm("/folder with spaces/dir", short_args='r'
+        assert rm("/folder with spaces/dir", 'r'
                   ) == 'rm -r -- "/folder with spaces/dir"'
         assert rm(["../../tmp/file1", "file2", "f i l e 3"]
                   ) == 'rm  -- "../../tmp/file1" "file2" "f i l e 3"'
         assert rm(
-            ["tmp/dir1", "dir2", "~/d i r 3/src/"], sudo=True,
-            short_args=['r', 'f', "I"], long_args=["verbose"]
+            ["tmp/dir1", "dir2", "~/d i r 3/src/"],
+            ['r', 'f', "I"], ["verbose"], True
         ) == 'sudo rm -r -f -I --verbose -- "tmp/dir1" "dir2" ~/"d i r 3/src/"'
 
         # batch=True
         def rm(path: Union[str, Iterable[str]],
-               sudo=False,
                short_args: Union[str, Iterable[str]] = [],
-               long_args: Iterable[str] = []) -> str:
+               long_args: Iterable[str] = [],
+               sudo=False) -> str:
             return gnu_coreutils.rm(
-                path, True, sudo, short_args, long_args, True)
+                path, short_args, long_args, True, sudo, True)
         # Test simple/edge cases
         assert rm('') == "rm  --"
         assert rm(['']) == "rm  --"
         assert rm(('')) == "rm  --"
         assert rm("file") == "rm  -- file"
         # Test short/long arguments
-        assert rm('', short_args="-r") == "rm -r --"
-        assert rm('', long_args=["--force"]) == "rm --force --"
-        assert rm('', short_args="rI", long_args=["force"]
+        assert rm('', "-r") == "rm -r --"
+        assert rm('', [], ["--force"]) == "rm --force --"
+        assert rm('', "rI", ["force"]
                   ) == "rm -r -I --force --"
-        assert rm('', short_args=["r", "I"], long_args=["force"]
+        assert rm('', ["r", "I"], ["force"]
                   ) == "rm -r -I --force --"
         # Test everything
         assert rm(
-            ["tmp/dir1", "dir2", "~/dir3/src/*"], sudo=True,
-            short_args=['r', 'f', "I"], long_args=["verbose"]
+            ["tmp/dir1", "dir2", "~/dir3/src/*"],
+            ['r', 'f', "I"], ["verbose"], True
         ) == "sudo rm -r -f -I --verbose -- tmp/dir1 dir2 ~/dir3/src/*"
 
         # Special cases (hacks)
@@ -458,7 +455,7 @@ class TestGNUcoreutils:
                   ) == "rm  -- file1 file2"
 
         # Case #2
-        assert rm(['"/dir 1" dir2/*'], short_args='r'
+        assert rm(['"/dir 1" dir2/*'], 'r'
                   ) == 'rm -r -- "/dir 1" dir2/*'
 
 

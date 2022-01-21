@@ -54,10 +54,10 @@ def cd(path: str = '',
 
 def cp(source_path: Union[str, Iterable[str]],
        destination_path: str,
-       batch=False,
-       sudo=False,
        short_args: Union[str, Iterable[str]] = [],
        long_args: Iterable[str] = [],
+       batch=False,
+       sudo=False,
        test=False) -> Union[Shell, str]:
     """
     Wrapper for cp command from GNU Core Utilities.
@@ -69,13 +69,13 @@ def cp(source_path: Union[str, Iterable[str]],
         source_path (str | Iterable[str]): file(s) and/or directory(-ies) that
             is/are need to be copied.
         destination_path (str): destination directory for source files/dirs.
-        batch (bool): wraps source_path in double quotes if False. Default is
-            False.
-        sudo (bool): adds sudo at the begining of cp command. Default is False.
         short_args (str | Iterable[str]): string or array of short arguments.
             Prefix-dash is ignored. Default is [] (no short arguments).
         long_args (Iterable[str]): array of long arguments. Prefix-dashes are
             ignored. Default is [] (no long arguments).
+        batch (bool): wraps source_path in double quotes if False. Default is
+            False.
+        sudo (bool): adds sudo at the begining of cp command. Default is False.
         test (bool): return command itself without its execution (for test
             purposes). Default is False.
 
@@ -111,10 +111,10 @@ def cp(source_path: Union[str, Iterable[str]],
 
 def ln(source_path: Union[str, Iterable[str]],
        destination_path: str,
-       batch=False,
-       sudo=False,
        short_args: Union[str, Iterable[str]] = [],
        long_args: Iterable[str] = [],
+       batch=False,
+       sudo=False,
        test=False) -> Union[Shell, str]:
     """
     Wrapper for ln command from GNU Core Utilities.
@@ -126,13 +126,13 @@ def ln(source_path: Union[str, Iterable[str]],
         source_path (str | Iterable[str]): file(s) and/or directory(-ies) of
             which (sym)link(s) is/are need to be created.
         destination_path (str): destination directory for source files/dirs.
-        batch (bool): wraps source_path in double quotes if False. Default is
-            False.
-        sudo (bool): adds sudo at the begining of ln command. Default is False.
         short_args (str | Iterable[str]): string or array of short arguments.
             Prefix-dash is ignored. Default is [] (no short arguments).
         long_args (Iterable[str]): array of long arguments. Prefix-dashes are
             ignored. Default is [] (no long arguments).
+        batch (bool): wraps source_path in double quotes if False. Default is
+            False.
+        sudo (bool): adds sudo at the begining of ln command. Default is False.
         test (bool): return command itself without its execution (for test
             purposes). Default is False.
 
@@ -167,10 +167,10 @@ def ln(source_path: Union[str, Iterable[str]],
 
 
 def ls(path: Union[str, Iterable[str]] = '',
-       batch=False,
-       sudo=False,
        short_args: Union[str, Iterable[str]] = [],
        long_args: Iterable[str] = [],
+       batch=False,
+       sudo=False,
        test=False) -> Union[Shell, str]:
     """
     Wrapper for ls command from GNU Core Utilities.
@@ -180,12 +180,12 @@ def ls(path: Union[str, Iterable[str]] = '',
     Parameters:
         path (str | Iterable[str]): directory(-ies) of which content is need to
             be gathered. Default is '' (aka present/current working directory).
-        batch (bool): wraps path in double quotes if False. Default is False.
-        sudo (bool): adds sudo at the begining of ls command. Default is False.
         short_args (str | Iterable[str]): string or array of short arguments.
             Prefix-dash is ignored. Default is [] (no short arguments).
         long_args (Iterable[str]): array of long arguments. Prefix-dashes are
             ignored. Default is [] (no long arguments).
+        batch (bool): wraps path in double quotes if False. Default is False.
+        sudo (bool): adds sudo at the begining of ls command. Default is False.
         test (bool): return command itself without its execution (for test
             purposes). Default is False.
 
@@ -217,10 +217,10 @@ def ls(path: Union[str, Iterable[str]] = '',
 
 def mv(source_path: Union[str, Iterable[str]],
        destination_path: str,
-       batch=False,
-       sudo=False,
        short_args: Union[str, Iterable[str]] = [],
        long_args: Iterable[str] = [],
+       batch=False,
+       sudo=False,
        test=False) -> Union[Shell, str]:
     """
     Wrapper for mv command from GNU Core Utilities.
@@ -232,13 +232,13 @@ def mv(source_path: Union[str, Iterable[str]],
         source_path (str | Iterable[str]): file(s) and/or directory(-ies) that
             is/are need to be moved/renamed.
         destination_path (str): destination directory for source files/dirs.
-        batch (bool): wraps source_path in double quotes if False. Default is
-            False.
-        sudo (bool): adds sudo at the begining of mv command. Default is False.
         short_args (str | Iterable[str]): string or array of short arguments.
             Prefix-dash is ignored. Default is [] (no short arguments).
         long_args (Iterable[str]): array of long arguments. Prefix-dashes are
             ignored. Default is [] (no long arguments).
+        batch (bool): wraps source_path in double quotes if False. Default is
+            False.
+        sudo (bool): adds sudo at the begining of mv command. Default is False.
         test (bool): return command itself without its execution (for test
             purposes). Default is False.
 
@@ -297,10 +297,10 @@ def pwd(short_args: Union[str, Iterable[str]] = [],
 
 
 def rm(path: Union[str, Iterable[str]],
-       batch=False,
-       sudo=False,
        short_args: Union[str, Iterable[str]] = [],
        long_args: Iterable[str] = [],
+       batch=False,
+       sudo=False,
        test=False) -> Union[Shell, str]:
     """
     Wrapper for rm command from GNU Core Utilities.
@@ -312,12 +312,12 @@ def rm(path: Union[str, Iterable[str]],
     Parameters:
         path (str | Iterable[str]): file(s) and/or directory(-ies) that is/are
             need to be removed.
-        batch (bool): wraps path in double quotes if False. Default is False.
-        sudo (bool): adds sudo at the begining of rm command. Default is False.
         short_args (str | Iterable[str]): string or array of short arguments.
             Prefix-dash is ignored. Default is [] (no short arguments).
         long_args (Iterable[str]): array of long arguments. Prefix-dashes are
             ignored. Default is [] (no long arguments).
+        batch (bool): wraps path in double quotes if False. Default is False.
+        sudo (bool): adds sudo at the begining of rm command. Default is False.
         test (bool): return command itself without its execution (for test
             purposes). Default is False.
 
