@@ -44,7 +44,7 @@ def mv(source_path: Union[str, Iterable[str]],
 
 
 def pwd(short_args: Union[str, Iterable[str]] = [],
-        long_args: Iterable[str] = []) -> Union[str, Shell]: ...
+        test: bool = False) -> Union[str, Shell]: ...
 
 
 def rm(path: Union[str, Iterable[str]],

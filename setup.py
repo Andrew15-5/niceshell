@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as file:
 
 setuptools.setup(
     name="niceshell",
-    version="2.0.1",
+    version="2.0.2",
     author="Andrew Voynov",
     author_email="andrewvoynov.b@gmail.com",
     description="Integration of shell and basic GNU core unilities for better coding.",
@@ -13,7 +13,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     license="MIT",
     url="https://github.com/Andrew15-5/niceshell",
-    download_url="https://github.com/Andrew15-5/niceshell/releases/download/v2.0.1/niceshell-2.0.1-py3-none-any.whl",
+    download_url="https://github.com/Andrew15-5/niceshell/releases/download/v2.0.2/niceshell-2.0.2-py3-none-any.whl",
     packages=["niceshell", "niceshell/tests"],
     package_data={
         "niceshell": ['*']

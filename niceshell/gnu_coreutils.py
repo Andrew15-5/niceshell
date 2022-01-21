@@ -272,7 +272,7 @@ def mv(source_path: Union[str, Iterable[str]],
 
 
 def pwd(short_args: Union[str, Iterable[str]] = [],
-        long_args: Iterable[str] = []) -> Union[str, Shell]:
+        test=False) -> Union[str, Shell]:
     """
     Returns present/current working directory (str) if no parameters have been
     passed, otherwise returns Shell object.
@@ -280,19 +280,20 @@ def pwd(short_args: Union[str, Iterable[str]] = [],
     Parameters:
         short_args (str | Iterable[str]): string or array of short arguments.
             Prefix-dash is ignored. Default is [] (no short arguments).
-        long_args (Iterable[str]): array of long arguments. Prefix-dashes are
-            ignored. Default is [] (no long arguments).
 
     Returns:
         Union[str, Shell]: PWD string if called without parameters, otherwise
             Shell object.
     """
-    args = normalize_short_and_long_args(
-        short_args, long_args, ShortArgsOption.APART)
-    process = Shell(f"pwd {args}".strip())
-    if short_args == [] and long_args == []:
-        return process.output()[:-1]
-    return process
+    args = normalize_short_and_long_args(short_args, [], ShortArgsOption.APART)
+    command = f"pwd {args} --"
+    if test:
+        return command
+    else:
+        process = Shell(command)
+        if short_args == []:
+            return process.output()[:-1]
+        return process
 
 
 def rm(path: Union[str, Iterable[str]],

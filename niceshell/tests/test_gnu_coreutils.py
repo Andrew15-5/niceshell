@@ -378,8 +378,16 @@ class TestGNUcoreutils:
     def test_pwd(self):
         pwd = gnu_coreutils.pwd
         # Asserts
+        # Test return value
         assert type(pwd()) == str
         assert type(pwd('L')) == core.Shell
+
+        # Test short arguments
+        def pwd(short_args: Union[str, Iterable[str]] = []):
+            return gnu_coreutils.pwd(short_args, True)
+        assert pwd("-L") == "pwd -L --"
+        assert pwd("LP") == "pwd -L -P --"
+        assert pwd(['L', 'P']) == "pwd -L -P --"
 
     def test_rm(self):
         rm = gnu_coreutils.rm
