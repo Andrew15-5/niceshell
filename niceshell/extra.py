@@ -35,7 +35,7 @@ def has_root_privileges():
     return not shell("sudo -n true").exit_code()
 
 
-def list_dirs(path: str = '.', with_errors=False):
+def list_dirs(path='.', hidden=True, non_hidden=True, with_errors=False):
     """
     Returns list of accessible directories that are located in path. Also
     stderr can be returned (e.g., check for accessibility of directories or
@@ -43,6 +43,9 @@ def list_dirs(path: str = '.', with_errors=False):
 
     Parameters:
         path (str): directory of needed subdirectories. Default is '.'.
+        hidden (bool): include hidden directories if True. Default is True.
+        non_hidden (bool): include non-hidden directories if True. Default is
+            True.
         with_errors (bool): if True also returns stderr. Default is False.
 
     Raises:
@@ -64,18 +67,24 @@ def list_dirs(path: str = '.', with_errors=False):
     path = paths[0]
     process = shell(Rf"ls -ALp {path} | grep / | sed 's|/$||'")
     dirs = process.get_lines()
+    if not hidden:
+        dirs = [dir for dir in dirs if dir.find('.') != 0]
+    if not non_hidden:
+        dirs = [dir for dir in dirs if dir.find('.') == 0]
     if with_errors:
         return (dirs, process.error_output())
     return dirs
 
 
-def list_files(path: str = '.', with_errors=False):
+def list_files(path='.', hidden=True, non_hidden=True, with_errors=False):
     """
     Returns list of accessible files that are located in path. Also stderr can
     be returned (e.g., check for accessibility of files or path).
 
     Parameters:
         path (str): directory of needed files. Default is '.'.
+        hidden (bool): include hidden files if True. Default is True.
+        non_hidden (bool): include non-hidden files if True. Default is True.
         with_errors (bool): if True also returns stderr. Default is False.
 
     Raises:
@@ -97,6 +106,10 @@ def list_files(path: str = '.', with_errors=False):
     path = paths[0]
     process = shell(Rf"ls -ALp {path} | grep -v /")
     files = process.get_lines()
+    if not hidden:
+        files = [file for file in files if file.find('.') != 0]
+    if not non_hidden:
+        files = [file for file in files if file.find('.') == 0]
     if with_errors:
         return (files, process.error_output())
     return files
