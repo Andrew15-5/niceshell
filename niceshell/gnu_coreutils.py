@@ -280,6 +280,8 @@ def pwd(short_args: Union[str, Iterable[str]] = [],
     Parameters:
         short_args (str | Iterable[str]): string or array of short arguments.
             Prefix-dash is ignored. Default is [] (no short arguments).
+        test (bool): return command itself without its execution (for test
+            purposes). Default is False.
 
     Returns:
         Union[str, Shell]: PWD string if called without parameters, otherwise

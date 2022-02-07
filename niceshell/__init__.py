@@ -23,7 +23,7 @@ __all__ = ["cd", "cp", "expose_tilde", "force_sudo_password_promt",
            "quotes_wrapper", "rm", "shell", "Shell", "ShortArgsOption", "UID",
            "USER"]
 __author__ = "Andrew Voynov"
-__version__ = "2.0.2"
+__version__ = "2.0.3"
 
 GID = Shell("id -g").output()[:-1]
 GROUP = Shell("id -gn").output()[:-1]

@@ -65,7 +65,7 @@ def list_dirs(path='.', hidden=True, non_hidden=True, with_errors=False):
     if len(paths) != 1:
         raise ValueError("Invalid path.")
     path = paths[0]
-    process = shell(Rf"ls -ALp {path} | grep / | sed 's|/$||'")
+    process = shell(Rf"ls -ALp {path} | grep / | sed 's|/||'")
     dirs = process.get_lines()
     if not hidden:
         dirs = [dir for dir in dirs if dir.find('.') != 0]
