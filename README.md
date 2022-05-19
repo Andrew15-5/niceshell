@@ -44,7 +44,7 @@ ln(files, "/tmp/").wait()
 
 Due to different preferences among coders some things like:
 
-* raised error instead of silencly returned error code or None
+* raised error instead of silently returned error code or None
 * type of raised error and its message;
 * behavior of edge cases (the way parameter's data is handled);
 * parameter names and their ordinal position
